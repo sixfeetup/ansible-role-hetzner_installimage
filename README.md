@@ -1,7 +1,7 @@
 hetzner_installimage
 ====================
 
-[![Build Status](https://travis-ci.org/nl2go/ansible-role-hetzner_installimage.svg?branch=master)](https://travis-ci.org/nl2go/ansible-role-hetzner_installimage)
+[![Build Status](https://travis-ci.com/nl2go/ansible-role-hetzner_installimage.svg?branch=master)](https://travis-ci.com/nl2go/ansible-role-hetzner_installimage)
 
 Use this role to base provision your hetzner machines with the hetzner installimage script and your public ssh key (but all automated through ansible).
 
