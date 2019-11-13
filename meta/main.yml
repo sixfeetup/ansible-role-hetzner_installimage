@@ -1,8 +1,8 @@
 ---
 galaxy_info:
-  author: andrelohmann
-  description: ansible galaxy role to talk to the hetzner.de api to provision your boxes with installimage but through ansible
-  company: smartformer UG
+  author: nl2go
+  description: ansible galaxy role to talk to the hetzner.de api to provision your boxes with installimage through ansible
+  company: Newsletter2Go GmbH
 
   license: MIT
 

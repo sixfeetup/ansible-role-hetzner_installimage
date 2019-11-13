@@ -1,19 +1,16 @@
-hetzner_installimage
-====================
+# hetzner_installimage
 
 [![Build Status](https://travis-ci.com/nl2go/ansible-role-hetzner_installimage.svg?branch=master)](https://travis-ci.com/nl2go/ansible-role-hetzner_installimage)
 
 Use this role to base provision your hetzner machines with the hetzner installimage script and your public ssh key (but all automated through ansible).
 
-Requirements
-------------
+## Requirements
 
 This role requires you to have a server at hetzner.de and some api credentials as well as your provisioning key uploaded to the hetzner robot. Read more about that under https://wiki.hetzner.de/index.php/Robot_Webservice
 
 Also for security reasons, the role will not reboot and install the machine, if it can't access it and check for the existance of a hostcode file. Therefor you need to have your provisioning key allready installed on the machine(s) you want to install (can be done through robot).
 
-Config Variables
----------------
+## Config Variables
 
 The following variables are suggested to be set within your ansible.cfg file
 
@@ -29,17 +26,10 @@ The following variables are suggested to be set within your ansible.cfg file
     scp_if_ssh = True
     control_path = %(directory)s/%%h-%%r
 
-Role Variables
---------------
+## Role Variables
 
 The default set of variables defines the installimage and needs at best to be overwritten in group_vars/host_vars
 
-    hetzner_installimage_install_drives:
-    - DRIVE1 /dev/sda
-    - DRIVE2 /dev/sdb
-    hetzner_installimage_install_raid:
-    - SWRAID 1
-    - SWRAIDLEVEL 1
     hetzner_installimage_install_bootloader: grub
     hetzner_installimage_install_hostname: Debian-87-jessie-64-minimal
     hetzner_installimage_install_partitions:
@@ -48,7 +38,20 @@ The default set of variables defines the installimage and needs at best to be ov
     - PART / ext4 all
     hetzner_installimage_install_image: /root/.oldroot/nfs/images/Ubuntu-1604-xenial-64-minimal.tar.gz
 
-The following mandatory variables need to be set in group_vars/host_vars to allow communication with the webservice and deployment of the public key
+The role includes an autodetection of RAID values and setup. It will configure no RAID if one disk is found and
+RAID1 if 2 disks are found. The automatic RAID config can be overwritten with the following variables:
+
+    hetzner_installimage_install_drives:
+    - DRIVE1 /dev/sda
+    - DRIVE2 /dev/sdb
+    hetzner_installimage_install_raid:
+    - SWRAID 1
+    - SWRAIDLEVEL 0
+
+It is also possible to just set `hetzner_installimage_install_raid` and let the autodetection find the respective disks.
+
+The following mandatory variables need to be set in group_vars/host_vars or as extra vars to allow communication with 
+the webservice and deployment of the public key:
 
     hetzner_installimage_webservice_username: username
     hetzner_installimage_webservice_password: password
@@ -58,15 +61,17 @@ The following variable can be set optionally, to set the hostname within the het
 
     hetzner_server_name: __YOUR_SERVER_NAME__
 
-Example Playbook
-----------------
+## Example Playbook
 
     - hosts: hetzner
       roles:
          - { role: nl2go.hetzner_installimage }
+      vars:
+        hetzner_installimage_webservice_username: "{{ hetzner_robot_api_user}}"
+        hetzner_installimage_webservice_password: "{{ hetzner_robot_api_pass}}"
+        hetzner_server_name: "{{ inventory_hostname }}"
 
-Installation Steps
-------------------
+## Installation Steps
 
   * Install a new machine
     1. Enter your hetzner robot (robot.your-server.de)
@@ -88,8 +93,7 @@ Installation Steps
 
 If you are sure, you will not accidentally purge a running machine, allready in use, you can directly run the role with the extra variable **--extra-vars "{ hetzner_installimage_ignore_hostcode: True }"**. This way the role will not check the machine for an existing /etc/hostcode file but will also not prevent the machine from being purged accidentally!
 
-Available images
-----------------
+## Available images
 
 The OS images are located in the folder /root/.oldroot/nfs/images/ inside the rescue system. The
 following images are available at 25 Oct 2019:
@@ -109,33 +113,11 @@ following images are available at 25 Oct 2019:
 * Ubuntu-1804-bionic-64-nextcloud.tar.gz
 * Ubuntu-1904-disco-64-minimal.tar.gz
 
-License
--------
+## License
 
-MIT License
+See the [LICENSE.md](LICENSE.md) file for details
 
-Copyright (c) 2019 newsletter2go.com
+## Maintainers
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-Author Information
-------------------
-
-* https://github.com/andrelohmann
-* https://github.com/nl2go
+- [andrelohmann](https://github.com/andrelohmann)
+- [dirkaholic](https://github.com/dirkaholic)

@@ -31,7 +31,7 @@
       stat:
         path: /etc/hostcode
       register: hetzner_installimage_hostcode
-      when: not hetzner_installimage_ignore_hostcode == true
+      when: not hetzner_installimage_ignore_hostcode
       ignore_errors: yes
   ignore_unreachable: true # if an error is returned here the host might not have the ssh key yet
 
@@ -39,17 +39,19 @@
   meta: clear_host_errors
 
 - name: Set default value for hetzner_installimage_run
-  set_fact: 
+  set_fact:
     hetzner_installimage_run: true
 
 - name: Overwrite hetzner_installimage_run when conditons match
-  set_fact: 
+  set_fact:
     hetzner_installimage_run: false
-  when: (hetzner_installimage_ignore_hostcode is not defined or not hetzner_installimage_ignore_hostcode == true) and (hetzner_installimage_hostcode.stat is defined and hetzner_installimage_hostcode.stat.exists == true)
+  when: |
+    (hetzner_installimage_ignore_hostcode is not defined or not hetzner_installimage_ignore_hostcode)
+    and (hetzner_installimage_hostcode.stat is defined and hetzner_installimage_hostcode.stat.exists)
 
 - name: Fail playbook if image is not supposed to be installed
   fail:
-    msg: "File /etc/hostcode exists on host {{ansible_host}}. Set hetzner_installimage_ignore_hostcode=true to force installation."
+    msg: "File /etc/hostcode exists on host {{ ansible_host }}. Set hetzner_installimage_ignore_hostcode=true to force installation."
   when: not hetzner_installimage_run
 
 - name: Include rescue mode handling tasks

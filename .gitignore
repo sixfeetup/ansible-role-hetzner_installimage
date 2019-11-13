@@ -1,2 +1,5 @@
 /meta/.galaxy_install_info
 
+.vscode/settings.json
+ansible.cfg
+*.pyc

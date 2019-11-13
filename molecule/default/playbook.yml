@@ -1,0 +1,8 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: Execute config task writing the installimage config file
+      include_role:
+        name: nl2go.hetzner_installimage
+        tasks_from: config

@@ -1,0 +1,16 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: Execute config task writing the installimage config file
+      include_role:
+        name: nl2go.hetzner_installimage
+        tasks_from: config
+      vars:
+        hetzner_installimage_install_drives:
+          - DRIVE1 /dev/sda
+          - DRIVE2 /dev/sdb
+        hetzner_installimage_install_raid:
+          - SWRAID 1
+          - SWRAIDLEVEL 1
+        hetzner_installimage_install_image: /root/.oldroot/nfs/images/Debian-101-buster-64-minimal.tar.gz

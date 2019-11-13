@@ -1,0 +1,16 @@
+---
+- name: include automatic software raid detection when respective variables are not set
+  include_tasks: determine_software_raid.yml
+  when: hetzner_installimage_install_drives is not defined
+
+- name: include automatic software raid detection when respective variables are not set
+  include_tasks: determine_software_raid.yml
+  when: hetzner_installimage_install_drives is not defined
+
+- name: copy autosetup configuration file
+  template:
+    src: installimage.j2
+    dest: /autosetup
+    owner: root
+    group: root
+    mode: 0644
