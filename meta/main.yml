@@ -1,7 +1,8 @@
 ---
 galaxy_info:
   author: nl2go
-  description: ansible galaxy role to talk to the hetzner.de api to provision your boxes with installimage through ansible
+  role_name: hetzner_installimage
+  description: Provision your hetzner boxes with installimage by leveraging the Hetzner Robot Webservice https://robot.your-server.de/doc/webservice/en.html
   company: Newsletter2Go GmbH
 
   license: MIT
