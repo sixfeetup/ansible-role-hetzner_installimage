@@ -1,6 +1,17 @@
-version: '3'
+version: '3.5'
+
 services:
-  hetzner-robot-api-mock:
-    image: nl2go/hetzner-robot-api-mock
-    ports:
-      - "3000:3000"
+  molecule:
+    image: quay.io/ansible/molecule:2.20
+    tty: true
+    volumes:
+      - .:/molecule/nl2go.hetzner_installimage
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - compose-molecule-network
+    working_dir: /molecule/nl2go.hetzner_installimage
+    entrypoint: /bin/ash
+
+networks:
+  compose-molecule-network:
+    name: molecule-network

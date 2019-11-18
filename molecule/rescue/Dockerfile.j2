@@ -6,6 +6,8 @@ FROM {{ item.registry.url }}/{{ item.image }}
 FROM {{ item.image }}
 {% endif %}
 
+EXPOSE 22
+
 {% if item.env is defined %}
 {% for var, value in item.env.items() %}
 {% if value %}

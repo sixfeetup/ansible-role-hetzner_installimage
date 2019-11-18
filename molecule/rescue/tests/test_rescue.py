@@ -7,8 +7,8 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 ).get_hosts('all')
 
 
-def test_autosetupfile_exists(host):
-    f = host.file('/root/installimage.cfg')
+def test_check_json_server(host):
+    f = host.file('/etc/hosts')
 
     assert f.exists
     assert f.user == 'root'

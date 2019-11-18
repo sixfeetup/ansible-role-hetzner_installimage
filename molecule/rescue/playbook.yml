@@ -7,8 +7,8 @@
         name: nl2go.hetzner_installimage
         tasks_from: rescuemode
       vars:
-        hetzner_installimage_robot_api_base_url: http://localhost:3000
+        hetzner_installimage_robot_api_base_url: http://hetzner-robot:3000
         hetzner_installimage_webservice_username: "robot"
-        hetzner_installimage_webservice_password: "unknown"
+        hetzner_installimage_webservice_password: "secret"
         hetzner_installimage_run: true
         hetzner_installimage_key_fingerprint: "fi:ng:er:pr:in:t0:00:00:00:00:00:00:00:00:00:00"

@@ -42,7 +42,7 @@
 - name: remove server from local known_hosts file
   command: ssh-keygen -R {{ ansible_default_ipv4.address }}
   delegate_to: localhost
-  changed_when: true
+  changed_when: false
 
 - name: pause a bit for the hardware reset to kick in
   pause: seconds=15
@@ -54,4 +54,4 @@
     port: 22
     delay: 1
     timeout: 180
-  delegate_to: localhost
+  #delegate_to: localhost
