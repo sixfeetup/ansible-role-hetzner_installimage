@@ -8,7 +8,7 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 
 
 def test_autosetupfile_exists(host):
-    f = host.file('/autosetup')
+    f = host.file('/root/installimage.cfg')
 
     assert f.exists
     assert f.user == 'root'
@@ -16,7 +16,8 @@ def test_autosetupfile_exists(host):
 
 
 def test_autosetupfile_has_correct_config(host):
-    f = host.file('/autosetup')
+    expectOS = '/root/.oldroot/nfs/images/Debian-101-buster-64-minimal.tar.gz'
+    f = host.file('/root/installimage.cfg')
 
     assert f.contains('SWRAID 1')
     assert f.contains('SWRAIDLEVEL 1')
@@ -24,4 +25,4 @@ def test_autosetupfile_has_correct_config(host):
     assert f.contains('DRIVE2')
 
     assert not f.contains('Ubuntu-1604-xenial-64-minimal')
-    assert f.contains('Debian-101-buster-64-minimal')
+    assert f.contains(expectOS)

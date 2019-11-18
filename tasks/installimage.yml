@@ -3,18 +3,27 @@
   shell: /usr/bin/tail -1 /root/.ssh/authorized_keys > tmpKey
   args:
     creates: /root/tmpKey
+  retries: 3
+  delay: 5
+  register: cp_ssh_key
+  until: cp_ssh_key.rc == 0
 
 - name: Include installimage config tasks
   include: config.yml
 
+- name: Pause for 30 seconds in order to avoid "device in use" issues
+  pause:
+    seconds: 30
+
 - name: run installimage
-  command: /root/.oldroot/nfs/install/installimage -K /root/tmpKey
-  register: result
+  command: /root/.oldroot/nfs/install/installimage -K /root/tmpKey -c /root/installimage.cfg -a
+  register: installimage_result
   changed_when: true
+  failed_when: "'Error' in installimage_result.stderr"
 
 - name: do another hardware reset
   uri:
-    url: "https://robot-ws.your-server.de/reset/{{ ansible_host }}"
+    url: "{{ hetzner_installimage_robot_api_base_url }}/reset/{{ ansible_default_ipv4.address }}"
     method: POST
     user: "{{ hetzner_installimage_webservice_username }}"
     password: "{{ hetzner_installimage_webservice_password }}"
@@ -26,7 +35,7 @@
   register: reset
 
 - name: remove server from local known_hosts file
-  command: ssh-keygen -R {{ ansible_host }}
+  command: ssh-keygen -R {{ ansible_default_ipv4.address }}
   delegate_to: localhost
   changed_when: true
 
@@ -36,7 +45,7 @@
 
 - name: waiting for server to come back
   wait_for:
-    host: "{{ ansible_host }}"
+    host: "{{ ansible_default_ipv4.address }}"
     port: 22
     delay: 1
     timeout: 180
@@ -46,6 +55,10 @@
 - name: update apt repositories
   raw: apt-get update
   changed_when: true
+  retries: 3
+  delay: 5
+  register: update_apt
+  until: update_apt.rc == 0
 
 # uses raw instead of module as python might not be installed yet
 - name: install python on remote host
@@ -54,7 +67,7 @@
 
 - name: generate hostcode
   set_fact:
-    _hostcode: "{{ ansible_host | md5 }}"
+    _hostcode: "{{ ansible_default_ipv4.address | md5 }}"
 
 - name: create hostcode file
   template:
@@ -66,7 +79,7 @@
 
 - name: set the server name in the hetzner robot if defined
   uri:
-    url: "https://robot-ws.your-server.de/server/{{ ansible_host }}"
+    url: "{{ hetzner_installimage_robot_api_base_url }}/server/{{ ansible_default_ipv4.address }}"
     method: POST
     user: "{{ hetzner_installimage_webservice_username }}"
     password: "{{ hetzner_installimage_webservice_password }}"

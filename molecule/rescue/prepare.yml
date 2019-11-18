@@ -1,0 +1,46 @@
+---
+- name: Prepare
+  hosts: all
+  vars:
+    hetzner_installimage_robot_api_base_url: http://localhost:3000
+  tasks:
+    - name: Update apt repositories using raw module as python might not be installed yet
+      raw: apt-get update
+    - name: Install SSH server on testinfra hosts as SSH is checked after reboot was requested
+      raw: apt-get install openssh-server -y
+    - name: Add rescue entry for testinfra server to json server db
+      uri:
+        url: "{{ hetzner_installimage_robot_api_base_url }}/boot/rescue"
+        method: POST
+        body:
+          active: false
+          arch: 
+            - 64
+            - 32
+          authorized_key: []
+          host_key: []
+          os: 
+            - linux
+            - freebsd
+            - vkvm
+          password: ""
+          server_ip: "{{ ansible_default_ipv4.address }}"
+          server_number: "{{ 999 | random }}"
+        status_code: 201
+        body_format: json
+      delegate_to: localhost
+    - name: Add reset entry for testinfra server to json server db
+      uri:
+        url: "{{ hetzner_installimage_robot_api_base_url }}/reset"
+        method: POST
+        body:
+          operating_status: "not supported"
+          server_ip: "{{ ansible_default_ipv4.address }}"
+          server_number: "{{ 999 | random }}"
+          type: 
+            - sw
+            - hw
+            - man
+        status_code: 201
+        body_format: json
+      delegate_to: localhost

@@ -13,4 +13,4 @@
         hetzner_installimage_install_raid:
           - SWRAID 1
           - SWRAIDLEVEL 1
-        hetzner_installimage_install_image: /root/.oldroot/nfs/images/Debian-101-buster-64-minimal.tar.gz
+        hetzner_installimage_install_image: Debian-101-buster-64-minimal.tar.gz

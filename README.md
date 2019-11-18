@@ -71,6 +71,8 @@ The following variable can be set optionally, to set the hostname within the het
         hetzner_installimage_webservice_password: "{{ hetzner_robot_api_pass}}"
         hetzner_server_name: "{{ inventory_hostname }}"
 
+See more examples in the playbooks of the different test scenarios inside the test folder.
+
 ## Installation Steps
 
   * Install a new machine
