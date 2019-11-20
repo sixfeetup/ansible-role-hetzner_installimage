@@ -8,6 +8,11 @@
       raw: docker run -d --rm --network molecule-network --name hetzner-robot nl2go/hetzner-robot-api-mock:1.1.0
       delegate_to: localhost
       run_once: true
+      # Using networks option in molcule.yml destroys the network on localhost during destroy step
+      # which is executed even before the test, so we connect networks here
+    - name: Connect testinfra instances to molecule container network  
+      raw: docker network connect molecule-network {{ inventory_hostname }}
+      delegate_to: localhost
     - name: Update apt repositories using raw module as python might not be installed yet
       raw: apt-get update
     - name: Install SSH server on testinfra hosts as SSH is checked after reboot was requested
