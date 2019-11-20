@@ -4,7 +4,7 @@
   tasks:
     - name: Execute config task writing the installimage config file
       include_role:
-        name: nl2go.hetzner_installimage
+        name: ansible-role-hetzner_installimage
         tasks_from: rescuemode
       vars:
         hetzner_installimage_robot_api_base_url: http://hetzner-robot:3000
