@@ -5,13 +5,13 @@
     hetzner_installimage_robot_api_base_url: http://hetzner-robot:3000
   tasks:
     - name: Run Hetzner Robot Mock API Container
-      raw: docker run -d --rm --network molecule-network --name hetzner-robot nl2go/hetzner-robot-api-mock:1.1.0
+      raw: docker run -d --rm --network molecule --name hetzner-robot nl2go/hetzner-robot-api-mock:1.2.3
       delegate_to: localhost
       run_once: true
       # Using networks option in molcule.yml destroys the network on localhost during destroy step
       # which is executed even before the test, so we connect networks here
     - name: Connect testinfra instances to molecule container network  
-      raw: docker network connect molecule-network {{ inventory_hostname }}
+      raw: docker network connect molecule {{ inventory_hostname }}
       delegate_to: localhost
     - name: Update apt repositories using raw module as python might not be installed yet
       raw: apt-get update
@@ -52,7 +52,7 @@
             - vkvm
           password: ""
           server_ip: "{{ ansible_default_ipv4.address }}"
-          server_number: "{{ 999 | random }}"
+          server_number: "{{ ansible_default_ipv4.address.split('.')[3].strip() }}"
         status_code: 201
         body_format: json
       delegate_to: localhost
@@ -66,7 +66,7 @@
         body:
           operating_status: "not supported"
           server_ip: "{{ ansible_default_ipv4.address }}"
-          server_number: "{{ 999 | random }}"
+          server_number: "{{ ansible_default_ipv4.address.split('.')[3].strip() }}"
           type: 
             - sw
             - hw

@@ -45,7 +45,7 @@
 
 - name: waiting for server to come back
   wait_for:
-    host: "{{ ansible_default_ipv4.address }}"
+    host: "{{ inventory_hostname }}"
     port: 22
     delay: 1
     timeout: 180
