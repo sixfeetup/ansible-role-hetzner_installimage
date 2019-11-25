@@ -1,0 +1,87 @@
+---
+- name: Prepare
+  hosts: all
+  vars:
+    hetzner_installimage_robot_api_base_url: http://hetzner-robot:3000
+  tasks:
+    - name: Run Hetzner Robot Mock API Container
+      raw: docker run -d --rm --network molecule --name hetzner-robot nl2go/hetzner-robot-api-mock:1.2.3
+      delegate_to: localhost
+      run_once: true
+      # Using networks option in molcule.yml destroys the network on localhost during destroy step
+      # which is executed even before the test, so we connect networks here
+    - name: Connect testinfra instances to molecule container network  
+      raw: docker network connect molecule {{ inventory_hostname }}
+      delegate_to: localhost
+    - name: Update apt repositories using raw module as python might not be installed yet
+      raw: apt-get update
+    - name: Install SSH server on testinfra hosts as SSH is checked after reboot was requested
+      raw: apt-get install openssh-server -y
+    - name: Start SSH server on testinfra hosts as SSH is checked after reboot was requested
+      raw: service ssh start
+    - name: Get users homedir
+      raw: command echo ~
+      register: homedir
+      delegate_to: localhost
+    - name: Create ssh dir in user home directory
+      raw: "mkdir -p {{ homedir.stdout | trim }}/.ssh"
+      delegate_to: localhost
+    - name: Create known_hosts file in ssh dir
+      raw: "touch {{ homedir.stdout | trim }}/.ssh/known_hosts"
+      delegate_to: localhost
+    - name: Adjust rights for ssh dir in home directory
+      raw: "chmod -R 0700 {{ homedir.stdout | trim }}/.ssh"
+      delegate_to: localhost
+    - name: Create ssh directory on host
+      raw: "mkdir /root/.ssh"
+    - name: Create authorized_keys file with fake line in ssh directory on host
+      raw: "echo 'test' > /root/.ssh/authorized_keys"
+    - name: Create base installimage directory
+      raw: "mkdir -p /root/.oldroot/nfs/install"
+    - name: Write fake installimage executable to host
+      copy:
+        dest: "/root/.oldroot/nfs/install/installimage"
+        content: "#!/bin/bash\n\nexit 0"
+        mode: '0755'
+    - name: Add rescue entry for testinfra server to json server db
+      uri:
+        url: "{{ hetzner_installimage_robot_api_base_url }}/boot/rescue"
+        user: "robot"
+        password: "secret"
+        force_basic_auth: yes
+        method: POST
+        body:
+          active: false
+          arch: 
+            - 64
+            - 32
+          authorized_key: []
+          host_key: []
+          os: 
+            - linux
+            - freebsd
+            - vkvm
+          password: ""
+          server_ip: "{{ ansible_default_ipv4.address }}"
+          server_number: "{{ ansible_default_ipv4.address.split('.')[3].strip() }}"
+        status_code: 201
+        body_format: json
+      delegate_to: localhost
+    - name: Add reset entry for testinfra server to json server db
+      uri:
+        url: "{{ hetzner_installimage_robot_api_base_url }}/reset"
+        user: "robot"
+        password: "secret"
+        force_basic_auth: yes
+        method: POST
+        body:
+          operating_status: "not supported"
+          server_ip: "{{ ansible_default_ipv4.address }}"
+          server_number: "{{ ansible_default_ipv4.address.split('.')[3].strip() }}"
+          type: 
+            - sw
+            - hw
+            - man
+        status_code: 201
+        body_format: json
+      delegate_to: localhost

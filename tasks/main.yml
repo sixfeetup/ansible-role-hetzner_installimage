@@ -12,6 +12,7 @@
     user_confirmations: {}
   run_once: true
   delegate_to: localhost
+  when: user_confirmations is not defined
 
 - name: Add user confirmation for each host
   set_fact:
