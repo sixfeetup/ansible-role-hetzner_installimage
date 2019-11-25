@@ -17,7 +17,7 @@ class RescueModeTest(unittest.TestCase):
             os.environ['MOLECULE_INVENTORY_FILE']
         ).get_hosts('all')
 
-    def test_rescue_service_posted_for_infra_hosts(self):
+    def test_rescue_endpoint_posted_per_host(self):
         for hostname in self.testinfra_hosts:
             host_ip = get_ip(testinfra.get_host("docker://" + hostname))
 
@@ -39,6 +39,26 @@ class RescueModeTest(unittest.TestCase):
                     'password': '',
                     'server_ip': host_ip,
                     'server_number': host_ip_parts[3]}
+                }
+            )
+
+    def test_reset_endoint_posted_per_host(self):
+        for hostname in self.testinfra_hosts:
+            host_ip = get_ip(testinfra.get_host("docker://" + hostname))
+
+            response = requests.get(self.hetzner_robot_base_url +
+                                    "/reset/" + host_ip,
+                                    auth=self.auth)
+
+            host_ip_parts = host_ip.split('.')
+            self.assertEqual(len(host_ip_parts), 4)
+
+            self.assertDictEqual(response.json(), {
+                'reset': {
+                    'server_ip': host_ip,
+                    'server_number': host_ip_parts[3],
+                    'type': 'hw',
+                    'operating_status': 'not supported'}
                 }
             )
 
