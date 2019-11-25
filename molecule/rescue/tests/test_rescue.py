@@ -3,64 +3,71 @@ import requests
 import unittest
 
 from requests.auth import HTTPBasicAuth
+from ddt import ddt, idata
 import testinfra.utils.ansible_runner
 
 
+testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
+    os.environ['MOLECULE_INVENTORY_FILE']
+).get_hosts('all')
+
+
+def host_generator():
+    for hostname in testinfra_hosts:
+        yield hostname
+
+
+@ddt
 class RescueModeTest(unittest.TestCase):
     hetzner_robot_base_url = os.getenv(
         'HETZNER_ROBOT_BASE_URL', 'http://localhost:3000'
     )
     auth = HTTPBasicAuth('robot', 'secret')
 
-    def setUp(self):
-        self.testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
-            os.environ['MOLECULE_INVENTORY_FILE']
-        ).get_hosts('all')
+    @idata(host_generator())
+    def test_rescue_endpoint_posted_per_host(self, hostname):
+        host_ip = get_ip(testinfra.get_host("docker://" + hostname))
 
-    def test_rescue_endpoint_posted_per_host(self):
-        for hostname in self.testinfra_hosts:
-            host_ip = get_ip(testinfra.get_host("docker://" + hostname))
+        response = requests.get(self.hetzner_robot_base_url +
+                                "/boot/" + host_ip + "/rescue",
+                                auth=self.auth)
 
-            response = requests.get(self.hetzner_robot_base_url +
-                                    "/boot/" + host_ip + "/rescue",
-                                    auth=self.auth)
+        host_ip_parts = host_ip.split('.')
+        self.assertEqual(len(host_ip_parts), 4)
 
-            host_ip_parts = host_ip.split('.')
-            self.assertEqual(len(host_ip_parts), 4)
+        self.assertDictEqual(response.json(), {
+            'rescue': {
+                'active': False,
+                'arch': '64',
+                'authorized_key':
+                    'fi:ng:er:pr:in:t0:00:00:00:00:00:00:00:00:00:00',
+                'host_key': [],
+                'os': 'linux',
+                'password': '',
+                'server_ip': host_ip,
+                'server_number': host_ip_parts[3]}
+            }
+        )
 
-            self.assertDictEqual(response.json(), {
-                'rescue': {
-                    'active': False,
-                    'arch': '64',
-                    'authorized_key':
-                        'fi:ng:er:pr:in:t0:00:00:00:00:00:00:00:00:00:00',
-                    'host_key': [],
-                    'os': 'linux',
-                    'password': '',
-                    'server_ip': host_ip,
-                    'server_number': host_ip_parts[3]}
-                }
-            )
+    @idata(host_generator())
+    def test_reset_endoint_posted_per_host(self, hostname):
+        host_ip = get_ip(testinfra.get_host("docker://" + hostname))
 
-    def test_reset_endoint_posted_per_host(self):
-        for hostname in self.testinfra_hosts:
-            host_ip = get_ip(testinfra.get_host("docker://" + hostname))
+        response = requests.get(self.hetzner_robot_base_url +
+                                "/reset/" + host_ip,
+                                auth=self.auth)
 
-            response = requests.get(self.hetzner_robot_base_url +
-                                    "/reset/" + host_ip,
-                                    auth=self.auth)
+        host_ip_parts = host_ip.split('.')
+        self.assertEqual(len(host_ip_parts), 4)
 
-            host_ip_parts = host_ip.split('.')
-            self.assertEqual(len(host_ip_parts), 4)
-
-            self.assertDictEqual(response.json(), {
-                'reset': {
-                    'server_ip': host_ip,
-                    'server_number': host_ip_parts[3],
-                    'type': 'hw',
-                    'operating_status': 'not supported'}
-                }
-            )
+        self.assertDictEqual(response.json(), {
+            'reset': {
+                'server_ip': host_ip,
+                'server_number': host_ip_parts[3],
+                'type': 'hw',
+                'operating_status': 'not supported'}
+            }
+        )
 
 
 def get_ip(host):
