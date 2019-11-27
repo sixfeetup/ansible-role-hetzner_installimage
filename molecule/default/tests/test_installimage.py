@@ -25,6 +25,30 @@ class RescueModeTest(unittest.TestCase):
     auth = HTTPBasicAuth('robot', 'secret')
 
     @idata(host_generator())
+    def test_installimage_config_file_exists(self, hostname):
+        host = testinfra.get_host("docker://" + hostname)
+        f = host.file('/root/installimage.cfg')
+
+        assert f.exists
+        assert f.user == 'root'
+        assert f.group == 'root'
+
+    @idata(host_generator())
+    def test_installimage_config_file_has_default_config(self, hostname):
+        expectOS = ('/root/.oldroot/nfs/images/'
+                    'Ubuntu-1604-xenial-64-minimal.tar.gz')
+
+        host = testinfra.get_host("docker://" + hostname)
+        f = host.file('/root/installimage.cfg')
+
+        assert f.contains('SWRAID 0')
+        assert f.contains('SWRAIDLEVEL 0')
+        assert f.contains('DRIVE1')
+        assert not f.contains('DRIVE2')
+
+        assert f.contains(expectOS)
+
+    @idata(host_generator())
     def test_hostcode_file_exists(self, hostname):
         host = testinfra.get_host("docker://" + hostname)
         f = host.file('/etc/hostcode')
@@ -55,12 +79,12 @@ class RescueModeTest(unittest.TestCase):
 
         self.assertDictEqual(response.json(), {
             'rescue': {
-                'active': False,
+                'active': False,  # active does not change in mock server
                 'arch': '64',
                 'authorized_key':
                     'fi:ng:er:pr:in:t0:00:00:00:00:00:00:00:00:00:00',
                 'host_key': [],
-                'os': 'linux',
+                'os': 'linux',  # os choosen during playbook run
                 'password': '',
                 'server_ip': host_ip,
                 'server_number': host_ip_parts[3]}
@@ -82,8 +106,37 @@ class RescueModeTest(unittest.TestCase):
             'reset': {
                 'server_ip': host_ip,
                 'server_number': host_ip_parts[3],
-                'type': 'hw',
+                'type': 'hw',  # type choosen during playbook run
                 'operating_status': 'not supported'}
+            }
+        )
+
+    @idata(host_generator())
+    def test_server_name_posted(self, hostname):
+        host_ip = get_ip(testinfra.get_host("docker://" + hostname))
+
+        response = requests.get(self.hetzner_robot_base_url +
+                                "/server/" + host_ip,
+                                auth=self.auth)
+
+        host_ip_parts = host_ip.split('.')
+        self.assertEqual(len(host_ip_parts), 4)
+
+        self.assertDictEqual(response.json(), {
+            'server': {
+                'cancelled': False,
+                'dc': 'NBG1-DC1',
+                'flatrate': True,
+                'ip': [host_ip],
+                'paid_until': '2010-09-02',
+                'product': 'DS 3000',
+                'server_ip': host_ip,
+                'server_name': hostname,
+                'server_number': host_ip_parts[3],
+                'status': 'ready',
+                'subnet': [{'ip': '2a01:4f8:111:4221::', 'mask': '64'}],
+                'throttled': True,
+                'traffic': '5 TB'}
             }
         )
 

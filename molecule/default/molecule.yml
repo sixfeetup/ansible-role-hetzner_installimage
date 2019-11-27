@@ -1,4 +1,18 @@
 ---
+scenario:
+  test_sequence: # custom test sequence without idempotence step
+    - lint
+    - dependency
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - side_effect
+    - verify
+    - cleanup
+    - destroy
 driver:
   name: docker
 lint:
@@ -22,5 +36,7 @@ provisioner:
     name: ansible-lint
 verifier:
   name: testinfra
+  env:
+    HETZNER_ROBOT_BASE_URL: http://hetzner-robot:3000
   lint:
     name: flake8

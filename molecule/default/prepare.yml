@@ -5,7 +5,7 @@
     hetzner_installimage_robot_api_base_url: http://hetzner-robot:3000
   tasks:
     - name: Run Hetzner Robot Mock API Container
-      raw: docker run -d --rm --network molecule --name hetzner-robot nl2go/hetzner-robot-api-mock:1.2.3
+      raw: docker run -d --rm --network molecule --name hetzner-robot nl2go/hetzner-robot-api-mock:1.2.4
       delegate_to: localhost
       run_once: true
       # Using networks option in molcule.yml destroys the network on localhost during destroy step
@@ -82,6 +82,33 @@
             - sw
             - hw
             - man
+        status_code: 201
+        body_format: json
+      delegate_to: localhost
+    - name: Add server entry for testinfra server to json server db
+      uri:
+        url: "{{ hetzner_installimage_robot_api_base_url }}/server"
+        user: "robot"
+        password: "secret"
+        force_basic_auth: yes
+        method: POST
+        body:
+          server_ip: "{{ ansible_default_ipv4.address }}"
+          server_number: "{{ ansible_default_ipv4.address.split('.')[3].strip() }}"
+          server_name: "server{{ 100 | random }}"
+          product: "DS 3000"
+          dc: "NBG1-DC1"
+          traffic: "5 TB"
+          flatrate: true
+          status: "ready"
+          throttled: true
+          cancelled: false
+          paid_until: "2010-09-02"
+          ip:
+            - "{{ ansible_default_ipv4.address }}"
+          subnet:
+            - ip: "2a01:4f8:111:4221::"
+              mask: "64"
         status_code: 201
         body_format: json
       delegate_to: localhost
