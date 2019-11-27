@@ -59,7 +59,7 @@ the webservice and deployment of the public key:
 
 The following variable can be set optionally, to set the hostname within the hetzner robot
 
-    hetzner_server_name: __YOUR_SERVER_NAME__
+    hetzner_installimage_server_name: __YOUR_SERVER_NAME__
 
 ## Example Playbook
 
@@ -69,7 +69,7 @@ The following variable can be set optionally, to set the hostname within the het
       vars:
         hetzner_installimage_webservice_username: "{{ hetzner_robot_api_user}}"
         hetzner_installimage_webservice_password: "{{ hetzner_robot_api_pass}}"
-        hetzner_server_name: "{{ inventory_hostname }}"
+        hetzner_installimage_server_name: "{{ inventory_hostname }}"
 
 See more examples in the playbooks of the different test scenarios inside the test folder.
 

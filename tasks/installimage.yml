@@ -85,8 +85,8 @@
     user: "{{ hetzner_installimage_webservice_username }}"
     password: "{{ hetzner_installimage_webservice_password }}"
     force_basic_auth: yes
-    body: "server_name={{ hetzner_server_name }}"
+    body: "server_name={{ hetzner_installimage_server_name }}"
     status_code: 200
   delegate_to: localhost
   register: hetzner_installimage_rescue
-  when: hetzner_server_name is defined
+  when: hetzner_installimage_server_name is defined
