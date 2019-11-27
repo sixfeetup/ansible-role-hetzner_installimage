@@ -45,12 +45,13 @@
   changed_when: false
 
 - name: pause a bit for the hardware reset to kick in
-  pause: seconds=15
+  pause:
+    seconds: "{{ hetzner_installimage_reboot_pause }}"
   delegate_to: localhost
 
 - name: waiting for server to come back
   wait_for:
-    host: "{{ inventory_hostname }}"
+    host: "{{ hetzner_installimage_wait_for_host }}"
     port: 22
     delay: 1
     timeout: 180

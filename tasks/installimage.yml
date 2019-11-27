@@ -11,9 +11,9 @@
 - name: Include installimage config tasks
   include: config.yml
 
-- name: Pause for 30 seconds in order to avoid "device in use" issues
+- name: Pause for a few seconds in order to avoid "device in use" issues after reboot
   pause:
-    seconds: 30
+    seconds: "{{ hetzner_installimage_installimage_pause }}"
 
 - name: run installimage
   command: /root/.oldroot/nfs/install/installimage -K /root/tmpKey -c /root/installimage.cfg -a
@@ -39,13 +39,14 @@
   delegate_to: localhost
   changed_when: true
 
-- name: pause a bit for the reboot to kick in
-  pause: seconds=60
+- name: pause a bit for the hardware reset to kick in
+  pause:
+    seconds: "{{ hetzner_installimage_reboot_pause }}"
   delegate_to: localhost
 
 - name: waiting for server to come back
   wait_for:
-    host: "{{ inventory_hostname }}"
+    host: "{{ hetzner_installimage_wait_for_host }}"
     port: 22
     delay: 1
     timeout: 180
