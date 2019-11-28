@@ -1,7 +1,0 @@
----
-- hosts: localhost
-  become: true
-  become_method: sudo
-  roles:
-    - ansible-role-hetzner_installimage
-...

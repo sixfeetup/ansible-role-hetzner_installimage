@@ -10,7 +10,7 @@
 - name: copy autosetup configuration file
   template:
     src: installimage.j2
-    dest: /autosetup
+    dest: /root/installimage.cfg
     owner: root
     group: root
     mode: 0644

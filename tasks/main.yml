@@ -7,15 +7,16 @@
   run_once: true
   delegate_to: localhost
 
-- name: Initialize user_confirmations variable
+- name: Initialize hetzner_installimage_user_confirmations variable
   set_fact:
-    user_confirmations: {}
+    hetzner_installimage_user_confirmations: {}
   run_once: true
   delegate_to: localhost
+  when: hetzner_installimage_user_confirmations is not defined
 
 - name: Add user confirmation for each host
   set_fact:
-    user_confirmations: "{{ user_confirmations | combine({item.item: item.user_input}) }}"
+    hetzner_installimage_user_confirmations: "{{ hetzner_installimage_user_confirmations | combine({item.item: item.user_input}) }}"
   with_items: "{{ reset_host.results }}"
   run_once: true
   delegate_to: localhost
@@ -23,7 +24,7 @@
 - name: Fail playbook if confirmation was not successful
   fail:
     msg: "installimage skipped for host {{ inventory_hostname }} "
-  when: user_confirmations[inventory_hostname] is not defined or user_confirmations[inventory_hostname] != 'y'
+  when: hetzner_installimage_user_confirmations[inventory_hostname] is not defined or hetzner_installimage_user_confirmations[inventory_hostname] != 'y'
 
 - name: Check existence of /etc/hostcode if possible
   block:

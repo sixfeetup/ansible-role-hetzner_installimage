@@ -13,4 +13,4 @@ HOSTNAME {{ hetzner_installimage_install_hostname }}
 {{ partition }}
 {% endfor %}
 
-IMAGE {{ hetzner_installimage_install_image }}
+IMAGE /root/.oldroot/nfs/images/{{ hetzner_installimage_install_image }}
