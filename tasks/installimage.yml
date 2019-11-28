@@ -23,7 +23,7 @@
 
 - name: do another hardware reset
   uri:
-    url: "{{ hetzner_installimage_robot_api_base_url }}/reset/{{ ansible_default_ipv4.address }}"
+    url: "{{ hetzner_installimage_robot_api_base_url }}/reset/{{ hetzner_installimage_ansible_host_ip }}"
     method: POST
     user: "{{ hetzner_installimage_webservice_username }}"
     password: "{{ hetzner_installimage_webservice_password }}"
@@ -35,7 +35,7 @@
   register: reset
 
 - name: remove server from local known_hosts file
-  command: ssh-keygen -R {{ ansible_default_ipv4.address }}
+  command: ssh-keygen -R {{ ansible_host }}
   delegate_to: localhost
   changed_when: true
 
@@ -68,7 +68,7 @@
 
 - name: generate hostcode
   set_fact:
-    _hostcode: "{{ ansible_default_ipv4.address | md5 }}"
+    _hostcode: "{{ hetzner_installimage_ansible_host_ip | md5 }}"
 
 - name: create hostcode file
   template:
@@ -80,7 +80,7 @@
 
 - name: set the server name in the hetzner robot if defined
   uri:
-    url: "{{ hetzner_installimage_robot_api_base_url }}/server/{{ ansible_default_ipv4.address }}"
+    url: "{{ hetzner_installimage_robot_api_base_url }}/server/{{ hetzner_installimage_ansible_host_ip }}"
     method: POST
     user: "{{ hetzner_installimage_webservice_username }}"
     password: "{{ hetzner_installimage_webservice_password }}"

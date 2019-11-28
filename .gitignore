@@ -3,3 +3,6 @@
 .vscode/settings.json
 ansible.cfg
 *.pyc
+/venv/
+/.idea/
+/ansible-role-hetzner_installimage.iml

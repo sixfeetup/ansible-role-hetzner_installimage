@@ -64,12 +64,16 @@ The following variable can be set optionally, to set the hostname within the het
 ## Example Playbook
 
     - hosts: hetzner
+      gather_facts: no
       roles:
          - { role: nl2go.hetzner_installimage }
       vars:
         hetzner_installimage_webservice_username: "{{ hetzner_robot_api_user}}"
         hetzner_installimage_webservice_password: "{{ hetzner_robot_api_pass}}"
         hetzner_installimage_server_name: "{{ inventory_hostname }}"
+
+**Important note:** The role must be executed with `gather_facts: no` as the hosts where you want to install a new 
+operating system usually have no ssh access configured and `gather_facts` will directly try to access the host. 
 
 See more examples in the playbooks of the different test scenarios inside the test folder.
 
