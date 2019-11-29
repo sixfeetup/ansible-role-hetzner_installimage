@@ -22,7 +22,5 @@ provisioner:
     name: ansible-lint
 verifier:
   name: testinfra
-  env:
-    HETZNER_ROBOT_BASE_URL: http://hetzner-robot:3000
   lint:
     name: flake8

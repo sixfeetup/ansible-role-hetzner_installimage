@@ -20,3 +20,4 @@
         hetzner_installimage_reboot_pause: 0
         hetzner_installimage_installimage_pause: 0
         hetzner_installimage_ansible_host_ip: "{{ ansible_default_ipv4.address }}"
+        hetzner_installimage_ignore_provisioned_flag: true # actual difference to default scenario

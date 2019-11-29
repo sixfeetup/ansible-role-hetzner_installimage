@@ -66,14 +66,18 @@
   raw: apt-get install python -y
   changed_when: true
 
-- name: generate hostcode
+- name: Lookup content of installimage config file
   set_fact:
-    _hostcode: "{{ hetzner_installimage_ansible_host_ip | md5 }}"
+    installimage_cfg_content: "{{ lookup('template', './installimage.j2') }}"
 
-- name: create hostcode file
+- name: generate provisioned.flag content using the content of the installimage config
+  set_fact:
+    provisioned_flag_content: "{{ installimage_cfg_content | md5 }}"
+
+- name: create provisioned_flag file
   template:
-    src: hostcode.j2
-    dest: /etc/hostcode
+    src: provisioned.flag.j2
+    dest: /etc/provisioned.flag
     owner: root
     group: root
     mode: 0644

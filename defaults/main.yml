@@ -17,8 +17,8 @@ hetzner_installimage_install_partitions:
 - PART /boot ext4 1G
 - PART / ext4 all
 hetzner_installimage_install_image: Ubuntu-1604-xenial-64-minimal.tar.gz
-# prevent reinstallation of running servers with /etc/hostcode file
-hetzner_installimage_ignore_hostcode: False
+# prevent reinstallation of running servers with /etc/provisioned.flag file
+hetzner_installimage_ignore_provisioned_flag: False
 # time to wait before the reboot kicks after requesting hardware reset
 hetzner_installimage_reboot_pause: 30
 # time to wait before installimage run starts after booting host in rescue mode

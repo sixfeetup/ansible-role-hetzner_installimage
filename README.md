@@ -1,14 +1,15 @@
 # hetzner_installimage
 
 [![Build Status](https://travis-ci.com/nl2go/ansible-role-hetzner_installimage.svg?branch=master)](https://travis-ci.com/nl2go/ansible-role-hetzner_installimage)
+[![Ansible Galaxy](https://img.shields.io/badge/role-nl2go.hetzner_installimage-blue.svg)](https://galaxy.ansible.com/nl2go/hetzner_installimage/)
+[![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/nl2go/ansible-role-hetzner_installimage)](https://galaxy.ansible.com/nl2go/hetzner_installimage)
 
-Use this role to base provision your hetzner machines with the hetzner installimage script and your public ssh key (but all automated through ansible).
+Use this role to base provision your hetzner machines with the hetzner installimage script and your public ssh key.
 
 ## Requirements
 
-This role requires you to have a server at hetzner.de and some api credentials as well as your provisioning key uploaded to the hetzner robot. Read more about that under https://wiki.hetzner.de/index.php/Robot_Webservice
-
-Also for security reasons, the role will not reboot and install the machine, if it can't access it and check for the existance of a hostcode file. Therefor you need to have your provisioning key allready installed on the machine(s) you want to install (can be done through robot).
+This role requires you to have a server at hetzner.de and some api credentials as well as your provisioning key uploaded 
+to the hetzner robot. Read more about that under https://wiki.hetzner.de/index.php/Robot_Webservice.
 
 ## Config Variables
 
@@ -31,12 +32,12 @@ The following variables are suggested to be set within your ansible.cfg file
 The default set of variables defines the installimage and needs at best to be overwritten in group_vars/host_vars
 
     hetzner_installimage_install_bootloader: grub
-    hetzner_installimage_install_hostname: Debian-87-jessie-64-minimal
+    hetzner_installimage_install_hostname: your-server-name-here
     hetzner_installimage_install_partitions:
     - PART swap swap 32G
     - PART /boot ext4 1G
     - PART / ext4 all
-    hetzner_installimage_install_image: /root/.oldroot/nfs/images/Ubuntu-1604-xenial-64-minimal.tar.gz
+    hetzner_installimage_install_image: Ubuntu-1604-xenial-64-minimal.tar.gz
 
 The role includes an autodetection of RAID values and setup. It will configure no RAID if one disk is found and
 RAID1 if 2 disks are found. The automatic RAID config can be overwritten with the following variables:
@@ -61,6 +62,11 @@ The following variable can be set optionally, to set the hostname within the het
 
     hetzner_installimage_server_name: __YOUR_SERVER_NAME__
 
+When executing the playbook successfully the role creates a flag file on the respective server under 
+`/etc/provisioned.flag`. In the beginning of the role it checks if that file exists on the host and skips the further
+tasks. That behaviour can be avoided by using the variable **--extra-vars "{ hetzner_installimage_ignore_provisioned_flag: True }"**.
+Setting that variable to true will skip checking the flag file.
+
 ## Example Playbook
 
     - hosts: hetzner
@@ -84,20 +90,19 @@ See more examples in the playbooks of the different test scenarios inside the te
     2. Order a new server
     3. Select your operating system
     4. Select your provisioning key
-    5. Run the hetzner_installimge role
+    5. Run the hetzner_installimage role
   * Install an existing machine
-    1. Enter your hetzner robot (robot.your-server.de)
-    2. Select the machine
-    3. Select "Linux"
-    4. Select your provisioning key
-    5. Reset the machine
-    6. Run the hetzner_installimge role
-  * Install an allready provisioned machine
+    1. Add your provisioning key to hetzner robot via robot.your-server.de
+    2. Run the hetzner_installimage role
+  * Install an already provisioned machine
     1. Enter the machine
-    2. Delete /etc/hostcode
-    3. Run the hetzner_installimge role
+    2. Delete /etc/provisioned.flag or set 
+    3. Run the hetzner_installimage role
 
-If you are sure, you will not accidentally purge a running machine, allready in use, you can directly run the role with the extra variable **--extra-vars "{ hetzner_installimage_ignore_hostcode: True }"**. This way the role will not check the machine for an existing /etc/hostcode file but will also not prevent the machine from being purged accidentally!
+If you are sure, you will not accidentally purge a running machine which is already in use, you can directly run the 
+role with the extra variable **--extra-vars "{ hetzner_installimage_ignore_provisioned_flag: True }"**. This way the 
+role will not check the machine for an existing `/etc/provisioned.flag` file but will also not prevent the machine from 
+being purged accidentally!
 
 ## Available images
 

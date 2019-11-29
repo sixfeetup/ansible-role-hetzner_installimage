@@ -1,4 +1,20 @@
 ---
+scenario:
+  # custom test sequence without idempotence step
+  # due to hetzner_installimage_ignore_provisioned_flag the role will be executed twice and not be idempotent any more
+  test_sequence:
+    - lint
+    - dependency
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - side_effect
+    - verify
+    - cleanup
+    - destroy
 driver:
   name: docker
 lint:

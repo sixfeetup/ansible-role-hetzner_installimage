@@ -1,0 +1,6 @@
+---
+- name: Prepare
+  hosts: all
+  tasks:
+    - name: Add fake provisioned.flag file
+      raw: echo 'test' > /etc/provisioned.flag
