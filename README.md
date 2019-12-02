@@ -83,6 +83,17 @@ operating system usually have no ssh access configured and `gather_facts` will d
 
 See more examples in the playbooks of the different test scenarios inside the test folder.
 
+The role will ask for a confirmation from the user to wipe all data for each host in the play. This can be overwritten
+by using the extra variable `hetzner_installimage_user_confirmations` which expects a dictionary with the hostname as 
+defined in the inventory as key and the value `y`.
+
+An example for the extra vars would look like this:
+
+`--extra-vars='{"hetzner_installimage_user_confirmations" : {"inventory-host-001": "y", "inventory-host-002": "y"}}'`
+
+If the respective host is present in the `hetzner_installimage_user_confirmations` dictionary already, then user 
+confirmation step will be skipped for that host.
+ 
 ## Installation Steps
 
   * Install a new machine

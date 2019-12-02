@@ -6,6 +6,7 @@
   register: reset_host
   run_once: true
   delegate_to: localhost
+  when: hetzner_installimage_user_confirmations is not defined or hetzner_installimage_user_confirmations[item] is not defined
 
 - name: Initialize hetzner_installimage_user_confirmations variable
   set_fact:
@@ -20,6 +21,7 @@
   with_items: "{{ reset_host.results }}"
   run_once: true
   delegate_to: localhost
+  when: item.user_input is defined
 
 - name: Set default value for hetzner_installimage_run
   set_fact:
