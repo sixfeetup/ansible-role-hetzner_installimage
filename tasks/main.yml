@@ -39,6 +39,7 @@
       when: not hetzner_installimage_ignore_provisioned_flag
       ignore_errors: yes
   ignore_unreachable: true # if an error is returned here the host might not have the ssh key yet
+  when: hetzner_installimage_run
 
 - name: Hosts that can not be connected due to mising ssh key should not be marked as unavailable
   meta: clear_host_errors
