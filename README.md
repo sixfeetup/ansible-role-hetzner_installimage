@@ -63,7 +63,7 @@ The following variable can be set optionally, to set the hostname within the het
     hetzner_installimage_server_name: __YOUR_SERVER_NAME__
 
 When executing the playbook successfully the role creates a flag file on the respective server under 
-`/etc/provisioned.flag`. In the beginning of the role it checks if that file exists on the host and skips the further
+`/etc/hetzner_installimage_provisioned.flag`. In the beginning of the role it checks if that file exists on the host and skips the further
 tasks. That behaviour can be avoided by using the variable **--extra-vars "{ hetzner_installimage_ignore_provisioned_flag: True }"**.
 Setting that variable to true will skip checking the flag file.
 
@@ -107,12 +107,12 @@ confirmation step will be skipped for that host.
     2. Run the hetzner_installimage role
   * Install an already provisioned machine
     1. Enter the machine
-    2. Delete /etc/provisioned.flag or set 
+    2. Delete /etc/hetzner_installimage_provisioned.flag or set 
     3. Run the hetzner_installimage role
 
 If you are sure, you will not accidentally purge a running machine which is already in use, you can directly run the 
 role with the extra variable **--extra-vars "{ hetzner_installimage_ignore_provisioned_flag: True }"**. This way the 
-role will not check the machine for an existing `/etc/provisioned.flag` file but will also not prevent the machine from 
+role will not check the machine for an existing `/etc/hetzner_installimage_provisioned.flag` file but will also not prevent the machine from 
 being purged accidentally!
 
 ## Available images

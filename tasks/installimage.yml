@@ -70,14 +70,14 @@
   set_fact:
     installimage_cfg_content: "{{ lookup('template', './installimage.j2') }}"
 
-- name: generate provisioned.flag content using the content of the installimage config
+- name: generate hetzner_installimage_provisioned.flag content using the content of the installimage config
   set_fact:
     provisioned_flag_content: "{{ installimage_cfg_content | md5 }}"
 
 - name: create provisioned_flag file
   template:
     src: provisioned.flag.j2
-    dest: /etc/provisioned.flag
+    dest: /etc/hetzner_installimage_provisioned.flag
     owner: root
     group: root
     mode: 0644

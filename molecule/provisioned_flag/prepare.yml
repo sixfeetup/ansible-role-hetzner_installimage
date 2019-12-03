@@ -2,5 +2,5 @@
 - name: Prepare
   hosts: all
   tasks:
-    - name: Add fake provisioned.flag file
-      raw: echo 'test' > /etc/provisioned.flag
+    - name: Add fake hetzner_installimage_provisioned.flag file
+      raw: echo 'test' > /etc/hetzner_installimage_provisioned.flag

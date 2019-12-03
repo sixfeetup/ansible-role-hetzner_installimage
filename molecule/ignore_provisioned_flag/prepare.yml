@@ -4,7 +4,7 @@
   vars:
     hetzner_installimage_robot_api_base_url: http://hetzner-robot:3000
   tasks:
-    - name: Add fake provisioned.flag file
-      raw: echo 'test' > /etc/provisioned.flag # actual difference to default scenario
+    - name: Add fake hetzner_installimage_provisioned.flag file
+      raw: echo 'test' > /etc/hetzner_installimage_provisioned.flag # actual difference to default scenario
     - name: Include default prepare tasks
       include: ../resources/tasks/prepare-default.yml

@@ -32,11 +32,11 @@
     hetzner_installimage_run: false
   when: hetzner_installimage_user_confirmations[inventory_hostname] is not defined or hetzner_installimage_user_confirmations[inventory_hostname] != 'y'
 
-- name: Check existence of /etc/provisioned.flag if possible
+- name: Check existence of /etc/hetzner_installimage_provisioned.flag if possible
   block:
-    - name: Check existence of /etc/provisioned.flag
+    - name: Check existence of /etc/hetzner_installimage_provisioned.flag
       stat:
-        path: /etc/provisioned.flag
+        path: /etc/hetzner_installimage_provisioned.flag
       register: hetzner_installimage_provisioned_flag
       when: not hetzner_installimage_ignore_provisioned_flag
       ignore_errors: yes

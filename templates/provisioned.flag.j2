@@ -1,1 +1,5 @@
-{{ provisioned_flag_content }}
+# DO NOT touch or remove this file unless you know what you are doing! It is created by the hetzner_installimage
+# ansible role in order to indicate that this host was provisioned already with an operating system. Removing the file
+# will therefor lead to a fresh install of the operating system on the host with all data being wiped.
+
+configmd5: {{ provisioned_flag_content }}

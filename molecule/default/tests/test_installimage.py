@@ -51,7 +51,7 @@ class RescueModeTest(unittest.TestCase):
     @idata(host_generator())
     def test_provisioned_flag_file_exists(self, hostname):
         host = testinfra.get_host("docker://" + hostname)
-        f = host.file('/etc/provisioned.flag')
+        f = host.file('/etc/hetzner_installimage_provisioned.flag')
 
         assert f.exists
         assert f.user == 'root'
