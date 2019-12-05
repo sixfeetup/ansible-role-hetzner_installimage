@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.com/nl2go/ansible-role-hetzner_installimage.svg?branch=master)](https://travis-ci.com/nl2go/ansible-role-hetzner_installimage)
 [![Ansible Galaxy](https://img.shields.io/badge/role-nl2go.hetzner_installimage-blue.svg)](https://galaxy.ansible.com/nl2go/hetzner_installimage/)
 [![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/nl2go/ansible-role-hetzner_installimage)](https://galaxy.ansible.com/nl2go/hetzner_installimage)
+[![Ansible Galaxy Downloads](https://img.shields.io/ansible/role/d/44642.svg?color=blue)](https://galaxy.ansible.com/nl2go/hetzner_installimage/)
 
 Use this role to base provision your hetzner machines with the hetzner installimage script and your public ssh key.
 
