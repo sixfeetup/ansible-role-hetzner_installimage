@@ -5,12 +5,13 @@
 
 # Ansible Role: Hetzner Installimage
 
-Use this role to base provision your Hetzner machines with the Hetzner installimage script and your public SSH key.
+An Ansible Role that manages the OS image installation lifecycle of [Hetzner servers](https://robot.your-server.de/server) using [Hetzner Robot API](https://robot.your-server.de/doc/webservice/en.html#preface).
 
 ## Requirements
 
-This role requires you to have a server at hetzner.de and some api credentials as well as your provisioning key uploaded 
-to the hetzner robot. Read more about that under https://wiki.hetzner.de/index.php/Robot_Webservice.
+- Existing [Hetzner Online GmbH Account](https://accounts.hetzner.com).
+- Configured [Hetzner Robot Webservice Account](https://robot.your-server.de/preferences).
+- Present SSH public key within [Hetzner Robot Key Management](https://robot.your-server.de/key/index).
 
 ## Config Variables
 
@@ -76,7 +77,7 @@ Setting this variable to `true` will skip checking the flag file.
     - hosts: hetzner
       gather_facts: no
       roles:
-         - { role: nl2go.hetzner_installimage }
+         - nl2go.hetzner_installimage
       vars:
         hetzner_installimage_webservice_username: "{{ hetzner_robot_api_user}}"
         hetzner_installimage_webservice_password: "{{ hetzner_robot_api_pass}}"
