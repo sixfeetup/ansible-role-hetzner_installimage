@@ -37,6 +37,7 @@
 - name: Check that known_hosts file exists
   stat:
     path: "{{ lookup('env','HOME') }}/.ssh/known_hosts"
+  delegate_to: localhost
   register: stat_known_hosts_result
 
 - name: remove server from local known_hosts file
