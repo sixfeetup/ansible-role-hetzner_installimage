@@ -41,7 +41,7 @@
 
 - name: Check that known_hosts file exists
   stat:
-    path: "{{ ansible_env.HOME }}/.ssh/known_hosts"
+    path: "{{ lookup('env','HOME') }}/.ssh/known_hosts"
   register: stat_known_hosts_result
 
 - name: remove server from local known_hosts file
