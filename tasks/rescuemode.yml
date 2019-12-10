@@ -41,14 +41,14 @@
 
 - name: Check that known_hosts file exists
   stat:
-    path: "{{ lookup('env','HOME') }}/.ssh/known_hosts"
+    path: "{{ ansible_env.HOME }}/.ssh/known_hosts"
   register: stat_known_hosts_result
 
 - name: remove server from local known_hosts file
   command: ssh-keygen -R {{ ansible_host }}
   delegate_to: localhost
   changed_when: false
-  when: stat_known_hosts_result.stat.exists == true 
+  when: stat_known_hosts_result.stat.exists
 
 - name: pause a bit for the hardware reset to kick in
   pause:
