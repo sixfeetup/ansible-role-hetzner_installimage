@@ -43,7 +43,7 @@
   command: ssh-keygen -R {{ ansible_host }}
   delegate_to: localhost
   changed_when: true
-  when: when: stat_known_hosts_result.stat.exists
+  when: stat_known_hosts_result.stat.exists
 
 - name: pause a bit for the hardware reset to kick in
   pause:
