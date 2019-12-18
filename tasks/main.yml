@@ -1,36 +1,15 @@
 ---
 - name: Confirm install for each host
   pause:
-    prompt: "Really wipe all host data and install fresh OS image on host {{ item }} (y/n) ?"
-  with_items: "{{ play_hosts }}"
-  register: reset_host
+    prompt: "Really wipe all host data and install fresh OS image on all target hosts (y/n) ?"
+  register: confirm_installation
   run_once: true
   delegate_to: localhost
-  when: hetzner_installimage_user_confirmations is not defined or hetzner_installimage_user_confirmations[item] is not defined
-
-- name: Initialize hetzner_installimage_user_confirmations variable
-  set_fact:
-    hetzner_installimage_user_confirmations: {}
-  run_once: true
-  delegate_to: localhost
-  when: hetzner_installimage_user_confirmations is not defined
-
-- name: Add user confirmation for each host
-  set_fact:
-    hetzner_installimage_user_confirmations: "{{ hetzner_installimage_user_confirmations | combine({item.item: item.user_input}) }}"
-  with_items: "{{ reset_host.results }}"
-  run_once: true
-  delegate_to: localhost
-  when: item.user_input is defined
+  when: not hetzner_installimage_skip_confirmation
 
 - name: Set default value for hetzner_installimage_run
   set_fact:
-    hetzner_installimage_run: true
-
-- name: Overwrite hetzner_installimage_run when confirmation was not successful
-  set_fact:
-    hetzner_installimage_run: false
-  when: hetzner_installimage_user_confirmations[inventory_hostname] is not defined or hetzner_installimage_user_confirmations[inventory_hostname] != 'y'
+    hetzner_installimage_run: "{{ confirm_installation.user_input | default(hetzner_installimage_skip_confirmation) | bool }}"
 
 - name: Check existence of /etc/hetzner_installimage_provisioned.flag if possible
   block:
