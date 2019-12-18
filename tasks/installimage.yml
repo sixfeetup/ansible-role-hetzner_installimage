@@ -1,12 +1,13 @@
 ---
-- name: copy public key into tempfile
-  shell: cp /root/.ssh/authorized_keys /root/tmpKey
-  args:
-    creates: /root/tmpKey
+- name: Copy public key into tempfile
+  copy:
+    remote_src: yes
+    src: /root/.ssh/authorized_keys
+    dest: /root/tmpKey
   retries: 3
   delay: 5
   register: cp_ssh_key
-  until: cp_ssh_key.rc == 0
+  until: cp_ssh_key.state is defined
 
 - name: Include installimage config tasks
   include: config.yml
@@ -16,7 +17,7 @@
     seconds: "{{ hetzner_installimage_installimage_pause }}"
 
 - name: run installimage
-  command: /root/.oldroot/nfs/install/installimage -K /root/tmpKey -c /root/installimage.cfg -a
+  command: /root/.oldroot/nfs/install/installimage -K /root/.ssh/authorized_keys -c /root/installimage.cfg -a
   register: installimage_result
   changed_when: true
   failed_when: "'Error' in installimage_result.stderr"
