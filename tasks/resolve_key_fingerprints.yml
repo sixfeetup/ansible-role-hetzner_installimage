@@ -1,10 +1,10 @@
 ---
 - name: Get all keys
   uri:
-    url: "{{ hetzner_key_webservice_base_url }}/key"
+    url: "{{ hetzner_installimage_robot_api_base_url }}/key"
     method: GET
-    user: "{{ hetzner_key_webservice_username }}"
-    password: "{{ hetzner_key_webservice_password }}"
+    user: "{{ hetzner_installimage_webservice_username }}"
+    password: "{{ hetzner_installimage_webservice_password }}"
     status_code: 200
     force_basic_auth: yes
   register: get_keys_response
