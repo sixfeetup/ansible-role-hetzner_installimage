@@ -33,7 +33,9 @@
     and (hetzner_installimage_provisioned_flag.stat is defined and hetzner_installimage_provisioned_flag.stat.exists)
 
 - name: Resolve key fingerprints
-  include: resolve_key_fingerprints.yml
+  import_tasks: resolve_key_fingerprints.yml
+  delegate_to: localhost
+  run_once: yes
   when: hetzner_installimage_run
 
 - name: Include rescue mode handling tasks
