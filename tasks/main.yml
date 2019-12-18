@@ -1,5 +1,5 @@
 ---
-- name: Confirm install for each host
+- name: Confirm OS image installation
   pause:
     prompt: "Really wipe all host data and install a fresh OS image on all target hosts (y/n) ?"
   register: confirm_installation
