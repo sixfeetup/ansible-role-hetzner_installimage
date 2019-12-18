@@ -13,6 +13,14 @@
   register: hetzner_installimage_rescue
   when: hetzner_installimage_run
 
+- name: compose rescue request body
+  set_fact:
+    rescue_request:
+        os: linux
+        arch: 64
+        authorized_key: "{{ key_fingerprints }}"
+  delegate_to: localhost
+
 - name: activate rescue mode
   uri:
     url: "{{ hetzner_installimage_robot_api_base_url }}/boot/{{ hetzner_installimage_ansible_host_ip }}/rescue"
@@ -20,7 +28,7 @@
     user: "{{ hetzner_installimage_webservice_username }}"
     password: "{{ hetzner_installimage_webservice_password }}"
     force_basic_auth: yes
-    body: "os=linux&arch=64&authorized_key={{ hetzner_installimage_key_fingerprint }}"
+    body: "{{ rescue_request | hetzner_installimage_form_urlencode }}"
     status_code: 200
     body_format: form-urlencoded
   delegate_to: localhost

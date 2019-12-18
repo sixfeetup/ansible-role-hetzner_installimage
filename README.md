@@ -58,11 +58,17 @@ the webservice and deployment of the public key:
 
     hetzner_installimage_webservice_username: username
     hetzner_installimage_webservice_password: password
-    hetzner_installimage_key_fingerprint: 00:11:22:33:44:55:66:77:88:99:aa:bb:cc:dd:ee:ff
 
 The following variable can be set optionally, to set the hostname within the hetzner robot
 
     hetzner_installimage_server_name: __YOUR_SERVER_NAME__
+
+If `hetzner_installimage_key_fingerprints`is set, only the selected keys will be installed during the image installation
+process from the [Hetzner Robot Key Management](https://robot.your-server.de/key/index). Otherwise all existing
+keys will be provisioned.
+
+    hetzner_installimage_key_fingerprints:
+        - 00:11:22:33:44:55:66:77:88:99:aa:bb:cc:dd:ee:ff
 
 When executing the playbook successfully the role creates a flag file on the respective server under 
 `/etc/hetzner_installimage_provisioned.flag`. In the beginning of the role it checks if that file exists on the host and skips the further

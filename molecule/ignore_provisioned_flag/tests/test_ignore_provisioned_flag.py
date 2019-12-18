@@ -82,7 +82,7 @@ class RescueModeTest(unittest.TestCase):
                 'active': False,  # active does not change in mock server
                 'arch': '64',
                 'authorized_key':
-                    'fi:ng:er:pr:in:t0:00:00:00:00:00:00:00:00:00:00',
+                    ['fi:ng:er:pr:in:t0:00:00:00:00:00:00:00:00:00:00'],
                 'host_key': [],
                 'os': 'linux',  # os choosen during playbook run
                 'password': '',

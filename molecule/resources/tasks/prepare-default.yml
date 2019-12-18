@@ -1,6 +1,6 @@
 ---
 - name: Run Hetzner Robot Mock API Container
-  raw: docker run -d --rm --network molecule --name hetzner-robot nl2go/hetzner-robot-api-mock:1.2.4
+  raw: docker run -d --rm --network molecule --name hetzner-robot nl2go/hetzner-robot-api-mock:1.4.0
   delegate_to: localhost
   run_once: true
   # Using networks option in molcule.yml destroys the network on localhost during destroy step

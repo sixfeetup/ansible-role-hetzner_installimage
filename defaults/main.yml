@@ -31,4 +31,4 @@ hetzner_installimage_wait_for_host: "{{ ansible_host }}"
 # should be overwritten when a FQDN instead of the IP is used as ansible_host, IP is needed for talking to hetzner API but
 # ansible_default_ipv4.address can't be used as that would need gather_facts to be true which is not possible here
 hetzner_installimage_ansible_host_ip: "{{ ansible_host }}"
-...
+hetzner_installimage_key_fingerprints: []
