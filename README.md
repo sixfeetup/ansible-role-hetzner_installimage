@@ -74,7 +74,7 @@ When executing the playbook successfully the role creates a flag file on the res
 `/etc/hetzner_installimage_provisioned.flag`. In the beginning of the role it checks if that file exists on the host and skips the further
 tasks. This behaviour can be avoided by using the variable `hetzner_installimage_ignore_provisioned_flag`:
 
-    --extra-vars "{ hetzner_installimage_ignore_provisioned_flag: True }"
+    --extra-vars "{ hetzner_installimage_ignore_provisioned_flag: yes }"
     
 Setting this variable to `true` will skip checking the flag file.
 
@@ -99,7 +99,7 @@ by using the variable `hetzner_installimage_skip_confirmation` set to `y`.
 
 An example for the extra vars would look like this:
 
-    --extra-vars='{"hetzner_installimage_skip_confirmation" : "yes"}'
+    --extra-vars "{ hetzner_installimage_skip_confirmation : yes }"
  
 ## Installation Steps
 
@@ -120,7 +120,7 @@ An example for the extra vars would look like this:
 If you are sure, you will not accidentally purge a running machine which is already in use, you can directly run the 
 role with the extra variable `hetzner_installimage_ignore_provisioned_flag`:
 
-    --extra-vars "{ hetzner_installimage_ignore_provisioned_flag: True }"
+    --extra-vars "{ hetzner_installimage_ignore_provisioned_flag: yes }"
 
 This way the role will not check the machine for an existing `/etc/hetzner_installimage_provisioned.flag` file but will also not prevent the machine from 
 being purged accidentally!
