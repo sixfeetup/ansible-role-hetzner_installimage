@@ -1,6 +1,6 @@
 ---
 - name: copy public key into tempfile
-  shell: /usr/bin/tail -1 /root/.ssh/authorized_keys > /root/tmpKey
+  shell: cp /root/.ssh/authorized_keys /root/tmpKey
   args:
     creates: /root/tmpKey
   retries: 3
