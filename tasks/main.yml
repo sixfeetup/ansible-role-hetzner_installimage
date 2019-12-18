@@ -1,7 +1,7 @@
 ---
 - name: Confirm install for each host
   pause:
-    prompt: "Really wipe all host data and install fresh OS image on all target hosts (y/n) ?"
+    prompt: "Really wipe all host data and install a fresh OS image on all target hosts (y/n) ?"
   register: confirm_installation
   run_once: true
   delegate_to: localhost
