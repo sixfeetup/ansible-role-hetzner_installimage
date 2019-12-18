@@ -99,7 +99,7 @@ by using the variable `hetzner_installimage_skip_confirmation` set to `y`.
 
 An example for the extra vars would look like this:
 
-    --extra-vars='{"hetzner_installimage_skip_confirmation" : "y"}'
+    --extra-vars='{"hetzner_installimage_skip_confirmation" : "yes"}'
  
 ## Installation Steps
 
