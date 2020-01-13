@@ -9,6 +9,13 @@
   register: cp_ssh_key
   until: cp_ssh_key.state is defined
 
+- name: Download custom OS image
+  get_url:
+    url: "{{ hetzner_installimage_custom_image_url }}"
+    dest: /tmp/{{ hetzner_installimage_custom_image_url | basename }}
+    mode: '0640'
+  when: hetzner_installimage_custom_image_url is defined
+
 - name: Include installimage config tasks
   include: config.yml
 

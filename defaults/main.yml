@@ -17,6 +17,10 @@ hetzner_installimage_install_partitions:
 - PART /boot ext4 1G
 - PART / ext4 all
 hetzner_installimage_install_image: Ubuntu-1604-xenial-64-minimal.tar.gz
+
+# to be set when a custom OS image should be downloaded and used during the installation process
+#hetzner_installimage_custom_image_url: https:://yourserver.de/images/Ubuntu-1604-xenial-64-custom.tar.gz
+
 # prevent reinstallation of running servers with /etc/hetzner_installimage_provisioned.flag file
 hetzner_installimage_ignore_provisioned_flag: no
 # time to wait before the reboot kicks after requesting hardware reset
