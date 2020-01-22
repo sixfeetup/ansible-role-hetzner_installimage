@@ -97,6 +97,14 @@
     group: root
     mode: 0644
 
+- name: copy installimage configuration file to host for debugging reasons
+  template:
+    src: installimage.j2
+    dest: /etc/hetzner_installimage.cfg
+    owner: root
+    group: root
+    mode: 0644
+
 - name: set the server name in the hetzner robot if defined
   uri:
     url: "{{ hetzner_installimage_robot_api_base_url }}/server/{{ hetzner_installimage_ansible_host_ip }}"

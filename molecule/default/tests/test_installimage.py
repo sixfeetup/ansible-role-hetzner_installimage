@@ -58,6 +58,15 @@ class RescueModeTest(unittest.TestCase):
         assert f.group == 'root'
 
     @idata(host_generator())
+    def test_installimage_config_backup_exists(self, hostname):
+        host = testinfra.get_host("docker://" + hostname)
+        f = host.file('/etc/hetzner_installimage.cfg')
+
+        assert f.exists
+        assert f.user == 'root'
+        assert f.group == 'root'
+
+    @idata(host_generator())
     def test_temp_ssh_keyfile_exists(self, hostname):
         host = testinfra.get_host("docker://" + hostname)
         f = host.file('/root/tmpKey')
