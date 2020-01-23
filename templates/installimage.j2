@@ -13,4 +13,8 @@ HOSTNAME {{ hetzner_installimage_install_hostname }}
 {{ partition }}
 {% endfor %}
 
+{% if hetzner_installimage_custom_image_url is defined and hetzner_installimage_custom_image_url|length %}
+IMAGE /tmp/{{ hetzner_installimage_custom_image_url | basename }}
+{% else %}
 IMAGE /root/.oldroot/nfs/images/{{ hetzner_installimage_install_image }}
+{% endif %}

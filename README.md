@@ -145,6 +145,10 @@ following images are available at 25 Oct 2019:
 * Ubuntu-1804-bionic-64-nextcloud.tar.gz
 * Ubuntu-1904-disco-64-minimal.tar.gz
 
+If none of these images work for you it is possible to use a custom image by leveraging
+the `hetzner_installimage_custom_image_url` variable. The image will be downloaded from
+the given url and used during the installation process.
+
 ## License
 
 See the [LICENSE.md](LICENSE.md) file for details

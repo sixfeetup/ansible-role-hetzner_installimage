@@ -9,6 +9,13 @@
   register: cp_ssh_key
   until: cp_ssh_key.state is defined
 
+- name: Download custom OS image
+  get_url:
+    url: "{{ hetzner_installimage_custom_image_url }}"
+    dest: /tmp/{{ hetzner_installimage_custom_image_url | basename }}
+    mode: '0640'
+  when: hetzner_installimage_custom_image_url is defined
+
 - name: Include installimage config tasks
   include: config.yml
 
@@ -86,6 +93,14 @@
   template:
     src: provisioned.flag.j2
     dest: /etc/hetzner_installimage_provisioned.flag
+    owner: root
+    group: root
+    mode: 0644
+
+- name: copy installimage configuration file to host for debugging reasons
+  template:
+    src: installimage.j2
+    dest: /etc/hetzner_installimage.cfg
     owner: root
     group: root
     mode: 0644
