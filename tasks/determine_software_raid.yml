@@ -1,4 +1,16 @@
 ---
+- name: check if software raid status is set in hetzner_installimage_install_raid
+  set_fact:
+    sw_raid_status: "{{ item.split(' ') | last| int }}"
+  when: item is match("SWRAID") and item is not match("SWRAIDLEVEL")
+  with_items: "{{ hetzner_installimage_install_raid | default([]) }}"
+
+- name: check if software raid level is set in hetzner_installimage_install_raid
+  set_fact:
+    sw_raid_level: "{{ item.split(' ') | last | int }}"
+  when: item is match("SWRAIDLEVEL")
+  with_items: "{{ hetzner_installimage_install_raid | default([]) }}"
+
 - name: automatically determine disk number
   shell: |
     set -o pipefail
@@ -18,17 +30,25 @@
     msg: unsufficient number of disks detected
   when: disk_number.stdout_lines|length > 2
 
-- name: set software raid status for single disk
+- name: set automatic software raid status for single disk when not set in config
   set_fact:
     sw_raid_status: 0
-    sw_raid_level: 0
-  when: disk_number.stdout_lines|length == 1
+  when: disk_number.stdout_lines|length == 1 and sw_raid_status is not defined
 
-- name: assume software raid level 1 for 2 disks
+- name: set automatic software raid level for single disk when not set in config
+  set_fact:
+    sw_raid_level: 0
+  when: disk_number.stdout_lines|length == 1 and sw_raid_level is not defined
+
+- name: set automatic software raid status for 2 disks when not set in config
   set_fact:
     sw_raid_status: 1
+  when: disk_number.stdout_lines|length == 2 and sw_raid_status is not defined
+
+- name: set automatic software raid level 1 for 2 disks when not set in config
+  set_fact:
     sw_raid_level: 1
-  when: disk_number.stdout_lines|length == 2
+  when: disk_number.stdout_lines|length == 2 and sw_raid_level is not defined
 
 - name: automatically determine first disk device
   shell: |
@@ -60,10 +80,11 @@
   set_fact:
     hetzner_installimage_install_drives:
       - DRIVE1 /dev/{{ first_disk_device.stdout }}
+  when: disk_number.stdout_lines|length == 1 and sw_raid_status == 0
 
 - name: set hetzner_installimage_install_drives value for raid 1
   set_fact:
     hetzner_installimage_install_drives:
       - DRIVE1 /dev/{{ first_disk_device.stdout }}
       - DRIVE2 /dev/{{ second_disk_device.stdout }}
-  when: disk_number.stdout_lines|length == 2
+  when: disk_number.stdout_lines|length == 2 and sw_raid_status == 1
