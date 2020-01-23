@@ -149,11 +149,15 @@ If none of these images work for you it is possible to use a custom image by lev
 the `hetzner_installimage_custom_image_url` variable. The image will be downloaded from
 the given url and used during the installation process.
 
-## License
-
-See the [LICENSE.md](LICENSE.md) file for details
-
 ## Maintainers
 
 - [dirkaholic](https://github.com/dirkaholic)
 - [build-failure](https://github.com/build-failure)
+
+## License
+
+See the [LICENSE.md](LICENSE.md) file for details
+
+## Author Information
+
+This role was initially created by/forked from [andrelohmann](https://github.com/andrelohmann).
