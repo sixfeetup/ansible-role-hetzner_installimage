@@ -151,5 +151,5 @@ See the [LICENSE.md](LICENSE.md) file for details
 
 ## Maintainers
 
-- [andrelohmann](https://github.com/andrelohmann)
 - [dirkaholic](https://github.com/dirkaholic)
+- [build-failure](https://github.com/build-failure)
