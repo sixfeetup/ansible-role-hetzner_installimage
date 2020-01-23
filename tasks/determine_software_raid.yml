@@ -80,11 +80,11 @@
   set_fact:
     hetzner_installimage_install_drives:
       - DRIVE1 /dev/{{ first_disk_device.stdout }}
-  when: sw_raid_status == 0
+  when: sw_raid_status|int == 0
 
 - name: set hetzner_installimage_install_drives value for raid 1
   set_fact:
     hetzner_installimage_install_drives:
       - DRIVE1 /dev/{{ first_disk_device.stdout }}
       - DRIVE2 /dev/{{ second_disk_device.stdout }}
-  when: sw_raid_status == 1
+  when: sw_raid_status|int == 1
