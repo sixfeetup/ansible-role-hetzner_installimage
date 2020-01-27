@@ -27,7 +27,7 @@
   command: /root/.oldroot/nfs/install/installimage -K /root/.ssh/authorized_keys -c /root/installimage.cfg -a
   register: installimage_result
   changed_when: true
-  failed_when: "'Error' in installimage_result.stderr"
+  failed_when: "'Error' in installimage_result.stderr or 'failed' in installimage_result.stdout"
 
 - name: do another hardware reset
   uri:
