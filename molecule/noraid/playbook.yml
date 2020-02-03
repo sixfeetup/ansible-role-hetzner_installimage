@@ -1,0 +1,13 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: Test automatic drive detection when no raid was configured
+      include_role:
+        name: ansible-role-hetzner_installimage
+        tasks_from: config
+      vars:
+        hetzner_installimage_install_raid:
+          - SWRAID 0
+          - SWRAIDLEVEL 0
+        hetzner_installimage_install_image: Debian-101-buster-64-minimal.tar.gz
