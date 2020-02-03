@@ -7,11 +7,17 @@
 
 An Ansible Role that manages the OS image installation lifecycle of [Hetzner servers](https://robot.your-server.de/server) using [Hetzner Robot API](https://robot.your-server.de/doc/webservice/en.html#preface).
 
-## Requirements
+## Prerequisites
 
 - Existing [Hetzner Online GmbH Account](https://accounts.hetzner.com).
 - Configured [Hetzner Robot Webservice Account](https://robot.your-server.de/preferences).
 - Present SSH public key within [Hetzner Robot Key Management](https://robot.your-server.de/key/index).
+
+## Requirements
+
+| Name | Type | Version | Location |
+|---|---|---|---|
+| [ansible-filter](https://github.com/nl2go/ansible-filter) | Python package | 1.0.1 | Control node |
 
 ## Config Variables
 
