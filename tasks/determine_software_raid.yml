@@ -1,7 +1,7 @@
 ---
 - name: check if software raid status is set in hetzner_installimage_install_raid
   set_fact:
-    sw_raid_status: "{{ item.split(' ') | last| int }}"
+    sw_raid_status: "{{ item.split(' ') | last | int }}"
   when: item is match("SWRAID") and item is not match("SWRAIDLEVEL")
   with_items: "{{ hetzner_installimage_install_raid | default([]) }}"
 
@@ -66,7 +66,7 @@
   args:
     executable: /bin/bash
   register: second_disk_device
-  when: sw_raid_status == 1
+  when: sw_raid_status|int == 1
   changed_when: false
 
 - name: set hetzner_installimage_install_raid values when not defined
