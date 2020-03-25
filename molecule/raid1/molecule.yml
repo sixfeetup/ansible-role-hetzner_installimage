@@ -22,5 +22,7 @@ provisioner:
     name: ansible-lint
 verifier:
   name: testinfra
+  env:
+    PYTHONWARNINGS: "ignore:.*U.*mode is deprecated:DeprecationWarning"
   lint:
     name: flake8

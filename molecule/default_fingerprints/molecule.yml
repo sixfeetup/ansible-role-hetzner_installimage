@@ -24,5 +24,6 @@ verifier:
   name: testinfra
   env:
     HETZNER_ROBOT_BASE_URL: http://hetzner-robot:3000
+    PYTHONWARNINGS: "ignore:.*U.*mode is deprecated:DeprecationWarning"
   lint:
     name: flake8

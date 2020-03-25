@@ -14,9 +14,3 @@
           - SWRAID 1
           - SWRAIDLEVEL 1
         hetzner_installimage_install_image: Debian-101-buster-64-minimal.tar.gz
-
-- name: Prepare controller
-  hosts: localhost
-  tasks:
-    - name: Prepare controller
-      include: ../resources/tasks/prepare-controller.yml

@@ -1,0 +1,8 @@
+---
+- name: Prepare
+  hosts: all
+  tasks:
+    - name: Create base image directory for regular images
+      raw: "mkdir -p /root/.oldroot/nfs/images"
+    - name: Create image file
+      raw: "touch /root/.oldroot/nfs/images/Debian-101-buster-64-minimal.tar.gz"

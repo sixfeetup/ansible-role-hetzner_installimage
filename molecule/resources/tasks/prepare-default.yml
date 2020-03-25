@@ -38,6 +38,10 @@
     dest: "/root/.oldroot/nfs/install/installimage"
     content: "#!/bin/bash\n\nexit 0"
     mode: '0755'
+- name: Create base image directory for regular images
+  raw: "mkdir -p /root/.oldroot/nfs/images"
+- name: Create default image file
+  raw: "touch /root/.oldroot/nfs/images/Ubuntu-1604-xenial-64-minimal.tar.gz"
 - name: Add rescue entry for testinfra server to json server db
   uri:
     url: "{{ hetzner_installimage_robot_api_base_url }}/boot/rescue"

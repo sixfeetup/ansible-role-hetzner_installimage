@@ -11,8 +11,10 @@
         hetzner_installimage_webservice_password: "secret"
         hetzner_installimage_key_fingerprints:
           - "fi:ng:er:pr:in:t0:00:00:00:00:00:00:00:00:00:00"
+        hetzner_installimage_skip_confirmation: yes
         hetzner_installimage_server_name: "{{ inventory_hostname }}"
         hetzner_installimage_wait_for_host: "{{ inventory_hostname }}"
         hetzner_installimage_reboot_pause: 0
         hetzner_installimage_installimage_pause: 0
         hetzner_installimage_ansible_host_ip: "{{ ansible_default_ipv4.address }}"
+        hetzner_installimage_install_image: Debian-102-buster-64-minimal.tar.gz
