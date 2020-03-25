@@ -134,23 +134,32 @@ being purged accidentally!
 
 ## Available images
 
-The OS images are located in the folder /root/.oldroot/nfs/images/ inside the rescue system. The
-following images are available at 25 Oct 2019:
+The OS images are located in the folder `/root/.oldroot/nfs/images/` inside the rescue system. The
+following images are available at 25 Mar 2020:
 
 * Archlinux-2017-64-minimal.tar.gz
 * archlinux-latest-64-minimal.tar.gz
-* CentOS-610-64-minimal.tar.gz
 * CentOS-76-64-minimal.tar.gz
+* CentOS-77-64-minimal.tar.gz
+* CentOS-80-64-minimal.tar.gz
+* CentOS-81-64-minimal.tar.gz
 * CoreOS-1298-64-production.bin.bz2
-* Debian-101-buster-64-LAMP.tar.gz
-* Debian-101-buster-64-minimal.tar.gz
+* Debian-103-buster-64-LAMP.tar.gz
+* Debian-103-buster-64-minimal.tar.gz
 * Debian-811-jessie-64-minimal.tar.gz
 * Debian-911-stretch-64-minimal.tar.gz
+* Debian-912-stretch-64-minimal.tar.gz
 * Ubuntu-1604-xenial-64-minimal-no-hwe.tar.gz
 * Ubuntu-1604-xenial-64-minimal.tar.gz
 * Ubuntu-1804-bionic-64-minimal.tar.gz
 * Ubuntu-1804-bionic-64-nextcloud.tar.gz
-* Ubuntu-1904-disco-64-minimal.tar.gz
+* Ubuntu-1910-eoan-64-minimal.tar.gz
+
+Older images are located in the `/root/.oldroot/nfs/images.old/` inside the rescue system. The role
+will check if an image exists in the folder with the current images first and afterwards check if
+an image exists in the folder with the older images and use it from the place where it was found first.
+This way it is possible to keep the operating system consistent amongst hosts even if the latest image
+of an operating system is updated at some point.
 
 If none of these images work for you it is possible to use a custom image by leveraging
 the `hetzner_installimage_custom_image_url` variable. The image will be downloaded from
