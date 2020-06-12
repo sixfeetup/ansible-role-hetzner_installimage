@@ -62,6 +62,12 @@
     timeout: 180
   delegate_to: localhost
 
+- name: Check is apt-get installed
+  shell: command -v apt-get >/dev/null 2>&1
+  changed_when: false
+  register: apt_get_exists
+  ignore_errors: yes
+
 # uses raw instead of module as python might not be installed yet
 - name: update apt repositories
   raw: apt-get update
@@ -70,11 +76,13 @@
   delay: 5
   register: update_apt
   until: update_apt.rc == 0
+  when: apt_get_exists.rc == 0
 
 # uses raw instead of module as python might not be installed yet
 - name: install python on remote host
   raw: apt-get install python -y
   changed_when: true
+  when: apt_get_exists.rc == 0
 
 - name: Lookup content of installimage config file
   set_fact:

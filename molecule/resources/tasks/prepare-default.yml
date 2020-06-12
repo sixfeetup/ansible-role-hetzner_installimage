@@ -9,11 +9,26 @@
   raw: docker network connect molecule {{ inventory_hostname }}
   delegate_to: localhost
 - name: Update apt repositories using raw module as python might not be installed yet
-  raw: apt-get update
-- name: Install SSH server on testinfra hosts as SSH is checked after reboot was requested
-  raw: apt-get install openssh-server -y
-- name: Start SSH server on testinfra hosts as SSH is checked after reboot was requested
-  raw: service ssh start
+  raw: if [ $(command -v apt-get) ]; then apt-get update; fi
+- name: Install SSH server on apt based hosts as SSH is checked after reboot was requested
+  raw: if [ $(command -v apt-get) ]; then apt-get install openssh-server -y; fi
+- name: Update yum repositories using raw module as python might not be installed yet
+  raw: if [ $(command -v yum) ]; then yum makecache; fi
+- name: Install SSH server on yum based hosts as SSH is checked after reboot was requested
+  raw: if [ $(command -v yum) ]; then yum -y install initscripts openssh-server && yum clean all; fi
+- name: Remove default systemctl on yum based systems
+  raw: if [ $(command -v yum) ]; then rm -rf /bin/systemctl; rm -rf /usr/bin/systemctl; fi
+- name: Prepare/overwrite docker systemctl replacement script for apt based systems
+  get_url:
+    url: https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl.py
+    dest: /usr/bin/systemctl
+    mode: '0775'
+- name: Generate host keys on yum based hosts for SSH to work
+  raw: if [ $(command -v yum) ]; then /usr/bin/ssh-keygen -A; fi
+- name: Start SSH server on apt based hosts as SSH is checked after reboot was requested
+  raw: if [ $(command -v apt-get) ]; then service ssh start; fi
+- name: Start SSH server on yum based hosts as SSH is checked after reboot was requested
+  raw: if [ $(command -v yum) ]; then service sshd start; fi
 - name: Get users homedir
   raw: command echo ~
   register: homedir

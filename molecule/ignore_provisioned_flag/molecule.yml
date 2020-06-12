@@ -32,6 +32,9 @@ platforms:
   - name: Ubuntu18
     image: ubuntu:18.04
     dockerfile: ../resources/Dockerfile.j2
+  - name: CentOS7
+    image: centos:7
+    dockerfile: ../resources/Dockerfile.j2
 provisioner:
   name: ansible
   lint:
