@@ -63,7 +63,7 @@
   delegate_to: localhost
 
 - name: Check is apt-get installed
-  shell: command -v apt-get >/dev/null 2>&1
+  raw: command -v apt-get >/dev/null 2>&1
   changed_when: false
   register: apt_get_exists
   ignore_errors: yes
