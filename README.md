@@ -102,7 +102,7 @@ operating system usually have no ssh access configured and `gather_facts` will d
 See more examples in the playbooks of the different test scenarios inside the test folder.
 
 The role will ask for a confirmation from the user to wipe all data for all hosts in the play. This can be overwritten
-by using the variable `hetzner_installimage_skip_confirmation` set to `y`.
+by using the variable `hetzner_installimage_skip_confirmation` set to `yes`.
 
 An example for the extra vars would look like this:
 
