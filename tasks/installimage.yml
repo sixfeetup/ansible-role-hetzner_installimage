@@ -9,11 +9,6 @@
   register: cp_ssh_key
   until: cp_ssh_key.state is defined
 
-- name: Check if the template file exists in the playbook
-  stat:
-    path: "{{ playbook_dir }}/templates/post-install.sh.j2"
-  register: template_file
-
 - name: Copy post-install script to /root/post-install.sh if it exists
   template:
     src: post-install.sh.j2
@@ -21,7 +16,7 @@
     mode: '0755'
     owner: root
     group: root
-  when: template_file.stat.exists
+  when: post_install
 
 - name: Download custom OS image
   get_url:
