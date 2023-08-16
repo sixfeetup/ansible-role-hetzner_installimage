@@ -16,7 +16,7 @@
     mode: '0755'
     owner: root
     group: root
-  when: post_install
+  when: hetzner_installimage_post_install
 
 - name: Download custom OS image
   get_url:
