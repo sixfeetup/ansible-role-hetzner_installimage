@@ -80,7 +80,7 @@
 
 # uses raw instead of module as python might not be installed yet
 - name: install python on remote host
-  raw: apt-get install python -y
+  raw: apt-get install python3 -y
   changed_when: true
   when: apt_get_exists.rc == 0
 
