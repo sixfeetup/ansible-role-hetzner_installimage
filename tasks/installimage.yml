@@ -9,6 +9,15 @@
   register: cp_ssh_key
   until: cp_ssh_key.state is defined
 
+- name: Copy post-install script if defined to /root/post-install.sh
+  copy:
+    dest: /root/post-install.sh
+    content: "{{ post_install_script | default('#!/bin/bash\necho No post-install script defined.') }}"
+    mode: '0755'
+    owner: root
+    group: root
+  when: post_install_script is defined and post_install_script != ''
+
 - name: Download custom OS image
   get_url:
     url: "{{ hetzner_installimage_custom_image_url }}"
