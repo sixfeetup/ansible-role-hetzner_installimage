@@ -9,14 +9,19 @@
   register: cp_ssh_key
   until: cp_ssh_key.state is defined
 
-- name: Copy post-install script if defined to /root/post-install.sh
-  copy:
+- name: Check if the template file exists in the playbook
+  stat:
+    path: "{{ playbook_dir }}/templates/post-install.sh.j2"
+  register: template_file
+
+- name: Copy post-install script to /root/post-install.sh if it exists
+  template:
+    src: post-install.sh.j2
     dest: /root/post-install.sh
-    content: "{{ post_install_script | default('#!/bin/bash\necho No post-install script defined.') }}"
     mode: '0755'
     owner: root
     group: root
-  when: post_install_script is defined and post_install_script != ''
+  when: template_file.stat.exists
 
 - name: Download custom OS image
   get_url:
