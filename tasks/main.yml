@@ -1,16 +1,3 @@
----
-- name: Confirm OS image installation
-  pause:
-    prompt: "Really wipe all host data and install a fresh OS image on all target hosts (yes/no) ?"
-  register: confirm_installation
-  run_once: true
-  delegate_to: localhost
-  when: not hetzner_installimage_skip_confirmation
-
-- name: Set default value for hetzner_installimage_run
-  set_fact:
-    hetzner_installimage_run: "{{ confirm_installation.user_input | default(hetzner_installimage_skip_confirmation) | bool }}"
-
 - name: Check existence of /etc/hetzner_installimage_provisioned.flag if possible
   block:
     - name: Check existence of /etc/hetzner_installimage_provisioned.flag
@@ -18,19 +5,30 @@
         path: /etc/hetzner_installimage_provisioned.flag
       register: hetzner_installimage_provisioned_flag
       when: not hetzner_installimage_ignore_provisioned_flag
-      ignore_errors: yes
+      ignore_errors: true
   ignore_unreachable: true # if an error is returned here the host might not have the ssh key yet
-  when: hetzner_installimage_run
 
-- name: Hosts that can not be connected due to mising ssh key should not be marked as unavailable
+- name: Hosts that can not be connected due to missing ssh key should not be marked as unavailable
   meta: clear_host_errors
 
-- name: Overwrite hetzner_installimage_run when conditons match
+- name: Overwrite hetzner_installimage_run when conditions match
   set_fact:
     hetzner_installimage_run: false
   when: |
     (hetzner_installimage_ignore_provisioned_flag is not defined or not hetzner_installimage_ignore_provisioned_flag)
     and (hetzner_installimage_provisioned_flag.stat is defined and hetzner_installimage_provisioned_flag.stat.exists)
+
+- name: Confirm OS image installation
+  pause:
+    prompt: "Really wipe all host data and install a fresh OS image on all target hosts (yes/no) ?"
+  register: confirm_installation
+  run_once: true
+  delegate_to: localhost
+  when: not hetzner_installimage_skip_confirmation and hetzner_installimage_run
+
+- name: Set default value for hetzner_installimage_run
+  set_fact:
+    hetzner_installimage_run: "{{ confirm_installation.user_input | default(hetzner_installimage_skip_confirmation) | bool }}"
 
 - name: Resolve key fingerprints
   import_tasks: resolve_key_fingerprints.yml
