@@ -1,10 +1,13 @@
 - name: Check existence of /etc/hetzner_installimage_provisioned.flag if possible
   block:
+    - name: Override ansible_user if alternate_user is defined
+      set_fact:
+        ansible_user: "{{ alternate_user }}"
+      when: alternate_user is defined
     - name: Check existence of /etc/hetzner_installimage_provisioned.flag
       stat:
         path: /etc/hetzner_installimage_provisioned.flag
       register: hetzner_installimage_provisioned_flag
-      remote_user: "{{ alternate_user | default(ansible_user) }}"
       when: not hetzner_installimage_ignore_provisioned_flag
       ignore_errors: true
   ignore_unreachable: true # if an error is returned here the host might not have the ssh key yet
