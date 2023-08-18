@@ -4,6 +4,7 @@
       stat:
         path: /etc/hetzner_installimage_provisioned.flag
       register: hetzner_installimage_provisioned_flag
+      remote_user: "{{ alternate_user | default(ansible_user) }}"
       when: not hetzner_installimage_ignore_provisioned_flag
       ignore_errors: true
   ignore_unreachable: true # if an error is returned here the host might not have the ssh key yet
