@@ -5,7 +5,7 @@
     hetzner_installimage_robot_api_base_url: http://hetzner-robot:3000
   tasks:
     - name: Include default prepare tasks
-      include_tasks: ../resources/tasks/prepare-default.yml
+      import_tasks: ../resources/tasks/prepare-default.yml
     - name: Create base image directory for old images
       raw: "mkdir -p /root/.oldroot/nfs/images.old"
     - name: Create image file in folder for old images 
@@ -15,4 +15,4 @@
   hosts: localhost
   tasks:
     - name: Prepare controller
-      include_tasks: ../resources/tasks/prepare-controller.yml
+      import_tasks: ../resources/tasks/prepare-controller.yml

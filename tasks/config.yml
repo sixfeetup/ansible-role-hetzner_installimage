@@ -1,6 +1,6 @@
 ---
 - name: include automatic software raid detection when respective variables are not set
-  include_tasks: determine_software_raid.yml
+  import_tasks: determine_software_raid.yml
   when: hetzner_installimage_install_drives is not defined
 
 - name: set image path variable when image was downloaded

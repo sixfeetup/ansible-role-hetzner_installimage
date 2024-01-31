@@ -3,4 +3,4 @@
   hosts: localhost
   tasks:
     - name: Prepare controller
-      include_tasks: ../resources/tasks/prepare-controller.yml
+      import_tasks: ../resources/tasks/prepare-controller.yml

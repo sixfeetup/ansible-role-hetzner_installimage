@@ -26,7 +26,7 @@
   when: hetzner_installimage_custom_image_url is defined
 
 - name: Include installimage config tasks
-  include_tasks: config.yml
+  import_tasks: config.yml
 
 - name: Pause for a few seconds in order to avoid "device in use" issues after reboot
   pause:
