@@ -1,39 +1,36 @@
 ---
-- name: Check provisioning status with alternate user
-  block:
-    - name: Check existence of /etc/hetzner_installimage_provisioned.flag using alternate user
-      stat:
-        path: /etc/hetzner_installimage_provisioned.flag
-      register: hetzner_installimage_provisioned_flag_alternate_user
-      ignore_errors: true
-      vars:
-        ansible_user: "{{ alternate_user }}"
-  ignore_unreachable: true
-  when: alternate_user is defined
-  run_once: true
-  delegate_to: localhost
-
 - name: Check provisioning status with default user
   block:
     - name: Check existence of /etc/hetzner_installimage_provisioned.flag using default user
       stat:
         path: /etc/hetzner_installimage_provisioned.flag
-      register: hetzner_installimage_provisioned_flag_default_user
+      register: provisioned_flag_default_user
       ignore_errors: true
   ignore_unreachable: true
-  when: not alternate_user is defined or hetzner_installimage_provisioned_flag_alternate_user is failed
   run_once: true
-  delegate_to: localhost
+
+- name: Check provisioning status with alternate user
+  stat:
+    path: /etc/hetzner_installimage_provisioned.flag
+  register: provisioned_flag_alternate_user
+  ignore_errors: true
+  vars:
+    ansible_user: "{{ alternate_user }}"
+    ansible_ssh_private_key_file: "{{ alternate_user_key }}"
+  when: alternate_user is defined and provisioned_flag_default_user.unreachable
+  run_once: true
 
 - name: Set fact for provisioning status
   set_fact:
     server_provisioned: >-
       {{
-        (hetzner_installimage_provisioned_flag_alternate_user is defined
-        and hetzner_installimage_provisioned_flag_alternate_user.stat.exists)
+        (provisioned_flag_alternate_user is defined
+        and provisioned_flag_alternate_user.stat is defined
+        and provisioned_flag_alternate_user.stat.exists | default(false))
         or
-        (hetzner_installimage_provisioned_flag_default_user is defined
-        and hetzner_installimage_provisioned_flag_default_user.stat.exists)
+        (provisioned_flag_default_user is defined
+        and provisioned_flag_default_user.stat is defined
+        and provisioned_flag_default_user.stat.exists | default(false))
       }}
   run_once: true
 
